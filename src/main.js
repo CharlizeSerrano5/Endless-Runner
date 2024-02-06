@@ -17,4 +17,6 @@ const config = {
     scene: [ Menu, Play ]
 }
 
+let keyUP, keyRIGHT, keyLEFT, keyJUMP
+
 const game = new Phaser.Game(config)
