@@ -6,7 +6,7 @@ class Play extends Phaser.Scene{
 
     create() {
         // create a frame for the screen
-
+        this.character = new Character(this, game.config.width / 2, game.config.height / 2, 'temp', 0, 0)
 
         // setting up the inputs
 
@@ -19,6 +19,7 @@ class Play extends Phaser.Scene{
     }
 
     update() {
-
+        // i can either use FSM or checkss
+            //set up checks first then use FSM
     }
 }

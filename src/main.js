@@ -5,9 +5,12 @@
 
 const config = {
 
-    width: 640,
-    height: 480,
+    //width: 640,
+    width: 400,
+    //height: 480,
+    height: 300,
     pixelArt: true,
+    zoom: 2,
     physics: {
         default: "arcade",
         arcade: {
