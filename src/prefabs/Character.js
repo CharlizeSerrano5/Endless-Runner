@@ -21,7 +21,7 @@ class Character extends Phaser.Physics.Arcade.Sprite {
         this.MAX_JUMPS = 2
         this.jumps = this.MAX_JUMPS
         this.body.allowGravity = true
-        //this.jumping = false
+        this.jumping = false
     
         
         //this.physics.world.gravity.y = 2600
@@ -83,21 +83,27 @@ class IdleState extends State {
 }
 
 class RunState extends State {
+    enter(scene, character){
+        // character.jumping = false
+        // console.log(character.jumping)
+        if(character.body.touching.down){
+            character.jumping = character.MAX_JUMPS
+        }
+    }
+    
     execute(scene, character) {
         const { left, right, up, down, space, shift } = scene.keys   
 
-        // setting up default variables
-        character.jumps = character.MAX_JUMPS
-        //character.jumping = false
-
+        // setting up default variables 
         // play the running animation
-
         //character.anims.play('running')
         //character.anims.stop()
 
         // transition to jump if pressing space
-        if(Phaser.Input.Keyboard.DownDuration(up, 150)) {
-
+        if(character.jumps > 0 && Phaser.Input.Keyboard.DownDuration(up, 150)) {
+            // if the character has not jumped
+            console.log(character.jumps)
+            
             this.stateMachine.transition('jump')
             return 
         }
@@ -106,23 +112,28 @@ class RunState extends State {
 
 class JumpState extends State{ // NEEDS REVISIONS
     enter(scene, character) {
-        console.log("down")        
+        // const { left, right, up, down, space, shift } = scene.keys           
         //character.anims.play('jumping')
         //character.anims.stop()
-        
+        // console.log(character.jumping)
+
+
         // see: https://photonstorm.github.io/phaser3-docs/Phaser.Input.Keyboard.html#.DownDuration__anchor
             // from VariableJump.js
-            character.body.velocity.y = character.JUMP_VELOCITY
+        character.body.velocity.y = character.JUMP_VELOCITY
+        this.stateMachine.transition('run')
+        
+        // scene.time.delayedCall(scene.keys.up.getDuration(), () =>  {
+        //     this.stateMachine.transition('run')
+            
+        // })
 
+        // character is now in jump state
+        
+        
     }
     execute(scene, character) {
-        const { left, right, up, down, space, shift } = scene.keys           
 
-        // once the character hits the floor then run again
-        if(character.body.touching.down){
-            console.log("hit ground")
-            this.stateMachine.transition('run')
-        }
     }
 }
 

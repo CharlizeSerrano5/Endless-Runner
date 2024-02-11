@@ -5,7 +5,8 @@ class Play extends Phaser.Scene{
 
     init() {
         // for variables
-        this.physics.world.gravity.y = 1300
+        this.physics.world.gravity.y = 2600
+        this.duration = 0;
     }
 
     create() {
@@ -55,7 +56,7 @@ class Play extends Phaser.Scene{
     update() {
         //TESTS
         //console.log(this.character.y)
-
+        // console.log(this.character.jumping)
 
         // Game Over Events
         if (this.gameOver){
