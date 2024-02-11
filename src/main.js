@@ -8,8 +8,9 @@
 let tileSize = 35
 const SCALE = 0.5
 const scroll_SPEED = 2
+
 const config = {
-    type: Phaser.AUTO,
+    type: Phaser.WEBGL,
     //width: 640,
     width: 400,
     //height: 480,
@@ -29,8 +30,5 @@ const config = {
     scene: [ Menu, Play ]
 }
 
-
-
-//let keyDOWN, keyJUMP
 
 const game = new Phaser.Game(config)

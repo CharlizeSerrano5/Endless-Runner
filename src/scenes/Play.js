@@ -5,7 +5,7 @@ class Play extends Phaser.Scene{
 
     init() {
         // for variables
-        this.physics.world.gravity.y = 2600
+        this.physics.world.gravity.y = 1300
     }
 
     create() {
@@ -26,16 +26,18 @@ class Play extends Phaser.Scene{
 
         // adding character to scene
         this.character = new Character(this, game.config.width / 8, game.config.height / 1.25, 'temp', 0, 0)
-        //adding physics collider
-        this.physics.add.collider(this.character, this.ground)
+        //adding physics + collider
+        this.character.setCollideWorldBounds(true)
+        // this.character.body.allowGravity = true
+        // this.character.setGravityY(2600)
 
+        this.physics.add.collider(this.character, this.ground)
+        this.character.setMaxVelocity(this.character.MAX_X_VEL, this.character.MAX_Y_VEL)
 
         // setting up keyboard inputs
-        // keyJUMP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W)
-        // keyDOWN = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S)  
-            // using example from FSM repository
         this.keys = this.input.keyboard.createCursorKeys()
-        this.keys.SpaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
+            // from FSM repository
+
 
         // creating obstacles
         // this.obstacle01 = new Obstacle()
@@ -51,6 +53,10 @@ class Play extends Phaser.Scene{
     }
 
     update() {
+        //TESTS
+        //console.log(this.character.y)
+
+
         // Game Over Events
         if (this.gameOver){
             this.character.reset()
@@ -62,12 +68,12 @@ class Play extends Phaser.Scene{
         // If Game is Not Over
         if (!this.gameOver){
             this.characterFSM.step() // setting up state machine from default
-
-            // Updating Tile Movement - temporarily at a fixed speed
             this.background.tilePositionX += scroll_SPEED
-            this.groundScroll.tilePositionX += scroll_SPEED
-        }            
+            this.groundScroll.tilePositionX += scroll_SPEED  
+            // Updating Tile Movement - temporarily at a fixed speed
 
+        }            
+        
     }
 
         

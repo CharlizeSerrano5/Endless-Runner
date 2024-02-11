@@ -1,4 +1,4 @@
-class Character extends Phaser.GameObjects.Sprite {
+class Character extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, texture, frame){
         super(scene, x, y, texture, frame)
         scene.add.existing(this) 
@@ -14,15 +14,22 @@ class Character extends Phaser.GameObjects.Sprite {
         this.ACCELERATION = 1500
         this.MAX_X_VEL = 500
         this.MAX_Y_VEL = 5000
-        this.DRAG = 600
+        //this.MAX_Y_VEL = -100
         this.MAX_JUMPS = 2
         this.JUMP_VELOCITY = -700
+
         this.MAX_JUMPS = 2
+        this.jumps = this.MAX_JUMPS
+        this.body.allowGravity = true
+        //this.jumping = false
+    
+        
         //this.physics.world.gravity.y = 2600
 
     
     // initializing state machine managing character
-    scene.characterFSM = new StateMachine('run', {
+    scene.characterFSM = new StateMachine('idle', {
+        idle: new IdleState(),
         run: new RunState(),
         jump: new JumpState(),
         flap: new FlapState(),
@@ -37,38 +44,85 @@ class Character extends Phaser.GameObjects.Sprite {
 // character specific state classes
 class IdleState extends State {
     enter(scene, character) {
-        character.setVelocity(0)
+        
+        //character.setVelocity(0)
         //character.anims.play('standing')
         //character.anims.stop()
 
         // if not in the idle state then allow tiles to move
+        // variable initializig
+            //character.jumps = character.MAX_JUMPS
+            //character.jumping = false
+
+    }
+    execute(scene, character){
+        // destructuring to make a local copy of the keyboard inputs
+        const { left, right, up, down, space, shift } = scene.keys        
+        //const spaceKey = scene.keys.spaceKey
+
+        scene.background.tilePositionX = 0
+        scene.groundScroll.tilePositionX = 0
+
+        // transition to jump if pressing space
+        // if(Phaser.Input.Keyboard.JustDown(up)) {
+        //     console.log("jump")
+        //     this.stateMachine.transition('jump')
+        //     return 
+        // }
+
+        // START THE GAME
+        // transition to run if pressing right
+        if(right.isDown){
+            console.log("run")
+            this.stateMachine.transition('run')
+        }
+
+
+
     }
 }
 
 class RunState extends State {
-    execute(scene, hero) {
-        
-        
+    execute(scene, character) {
+        const { left, right, up, down, space, shift } = scene.keys   
+
+        // setting up default variables
+        character.jumps = character.MAX_JUMPS
+        //character.jumping = false
+
         // play the running animation
-        // character should be colliding with ground
+
         //character.anims.play('running')
         //character.anims.stop()
 
+        // transition to jump if pressing space
+        if(Phaser.Input.Keyboard.DownDuration(up, 150)) {
 
+            this.stateMachine.transition('jump')
+            return 
+        }
     }
 }
 
-class JumpState extends State{
+class JumpState extends State{ // NEEDS REVISIONS
     enter(scene, character) {
-        // MAIN ISSUE
-        
-        
-
-    }
-
-    execute(scene, character) {
+        console.log("down")        
         //character.anims.play('jumping')
         //character.anims.stop()
+        
+        // see: https://photonstorm.github.io/phaser3-docs/Phaser.Input.Keyboard.html#.DownDuration__anchor
+            // from VariableJump.js
+            character.body.velocity.y = character.JUMP_VELOCITY
+
+    }
+    execute(scene, character) {
+        const { left, right, up, down, space, shift } = scene.keys           
+
+        // once the character hits the floor then run again
+        if(character.body.touching.down){
+            console.log("hit ground")
+            this.stateMachine.transition('run')
+        }
     }
 }
 
