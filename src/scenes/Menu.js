@@ -1,24 +1,67 @@
-class Menu extends Phaser.Scene{
+class Menu extends Phaser.Scene {
     constructor() {
         super('menuScene')
     }
 
     preload() {
+        // setting up a path
         this.load.path = './assets/'
+        // setting up background 
+        this.load.image('background', 'background.png')
+        this.load.image('tile', 'ground.png')
+
+        // setting up character sprite sheets
         this.load.spritesheet('temp', 'berd_pratice_1.png', {
             frameWidth: 32,
             frameHeight: 32,
         })
+        // setting up obstacle sprite sheets
+        this.load.image('obstacle', 'obstacle.png')
+
     }
 
     create() {
 
-
+    //--Setting up Animations
         //this.anims.create({
-            //key: ''
+            //key: 'walk'
             //frameRate: 8 
             //repeat: 0,
         //})
+
+        //this.anims.create({
+            //key: 'jump'
+            //frameRate: 8 
+            //repeat: 0,
+        //})
+
+        //this.anims.create({
+            //key: 'flap'
+            //frameRate: 8 
+            //repeat: 0,
+        //})
+
+        //this.anims.create({
+            //key: 'duck'
+            //frameRate: 8 
+            //repeat: 0,
+        //})
+
+
+    // Display Menu 
+        //this.add.text()
+        
+        // setting up the inputs
+
+        
+
+
         this.scene.start('playScene')
+    }
+
+    update(){
+
+        
+        
     }
 }

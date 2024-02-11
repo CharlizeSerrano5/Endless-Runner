@@ -3,8 +3,12 @@
 // Hours:
 // Creative Tilt:
 
-const config = {
+'use strict'
 
+let tileSize = 35
+let scroll_SPEED = 2
+const config = {
+    type: Phaser.AUTO,
     //width: 640,
     width: 400,
     //height: 480,
@@ -14,12 +18,18 @@ const config = {
     physics: {
         default: "arcade",
         arcade: {
-            debug: true
+            debug: true,
+            gravity: {
+                x: 0,
+                y: 0
+            }
         }
     },
     scene: [ Menu, Play ]
 }
 
-let keyUP, keyRIGHT, keyLEFT, keyJUMP
+
+
+let keyDOWN, keyJUMP
 
 const game = new Phaser.Game(config)
