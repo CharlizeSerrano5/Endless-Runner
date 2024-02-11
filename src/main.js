@@ -6,7 +6,8 @@
 'use strict'
 
 let tileSize = 35
-let scroll_SPEED = 2
+const SCALE = 0.5
+const scroll_SPEED = 2
 const config = {
     type: Phaser.AUTO,
     //width: 640,
@@ -30,6 +31,6 @@ const config = {
 
 
 
-let keyDOWN, keyJUMP
+//let keyDOWN, keyJUMP
 
 const game = new Phaser.Game(config)

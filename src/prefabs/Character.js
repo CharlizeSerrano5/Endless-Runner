@@ -17,6 +17,7 @@ class Character extends Phaser.GameObjects.Sprite {
         this.DRAG = 600
         this.MAX_JUMPS = 2
         this.JUMP_VELOCITY = -700
+        this.MAX_JUMPS = 2
         //this.physics.world.gravity.y = 2600
 
     
@@ -46,6 +47,13 @@ class IdleState extends State {
 
 class RunState extends State {
     execute(scene, hero) {
+        
+        
+        // play the running animation
+        // character should be colliding with ground
+        //character.anims.play('running')
+        //character.anims.stop()
+
 
     }
 }
@@ -53,17 +61,22 @@ class RunState extends State {
 class JumpState extends State{
     enter(scene, character) {
         // MAIN ISSUE
+        
+        
 
     }
 
     execute(scene, character) {
-
+        //character.anims.play('jumping')
+        //character.anims.stop()
     }
 }
 
 class FlapState extends State {
+    // considered a double jump - should only occur after first jump
+        // might combine with jump state?
     enter(scene, character) {
-
+        
     }
     
     execute(scene, character) {

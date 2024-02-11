@@ -9,16 +9,20 @@ class Play extends Phaser.Scene{
     }
 
     create() {
-        // placing tile sprites
+        // initializing scrolling background
         this.background = this.add.tileSprite(0,0, game.config.width, game.config.height, 'background').setOrigin(0,0)
         
+        // initializing scrolling tiles
         this.ground = this.add.group()
-        for (let i = 0; i < game.config.width;i += tileSize) {
-            let groundTile = this.physics.add.sprite(i, game.config.height - tileSize, 'tile')
+        for(let i = 0; i < game.config.width; i += tileSize) {
+            let groundTile = this.physics.add.sprite(i, game.config.height - tileSize, 'tile').setScale(SCALE).setOrigin(0)
             groundTile.body.immovable = true
             groundTile.body.allowGravity = false
             this.ground.add(groundTile)
         }
+
+        
+        this.groundScroll = this.add.tileSprite(0, game.config.height-tileSize, game.config.width, tileSize, 'groundScroll').setOrigin(0)
 
         // adding character to scene
         this.character = new Character(this, game.config.width / 8, game.config.height / 1.25, 'temp', 0, 0)
@@ -27,8 +31,11 @@ class Play extends Phaser.Scene{
 
 
         // setting up keyboard inputs
-        keyJUMP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W)
-        keyDOWN = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S)  
+        // keyJUMP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W)
+        // keyDOWN = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S)  
+            // using example from FSM repository
+        this.keys = this.input.keyboard.createCursorKeys()
+        this.keys.SpaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
 
         // creating obstacles
         // this.obstacle01 = new Obstacle()
@@ -36,7 +43,7 @@ class Play extends Phaser.Scene{
         // Game OVER flag
         this.gameOver = false
 
-
+        // debug key listener - TEMP - from FSM
         this.input.keyboard.on('keydown-D', function() {
             this.physics.world.drawDebug = this.physics.world.drawDebug ? false : true
             this.physics.world.debugGraphic.clear()
@@ -58,7 +65,7 @@ class Play extends Phaser.Scene{
 
             // Updating Tile Movement - temporarily at a fixed speed
             this.background.tilePositionX += scroll_SPEED
-            this.ground.tilePositionX += scroll_SPEED
+            this.groundScroll.tilePositionX += scroll_SPEED
         }            
 
     }
