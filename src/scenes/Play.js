@@ -27,21 +27,22 @@ class Play extends Phaser.Scene{
 
         // adding character to scene
         this.character = new Character(this, game.config.width / 8, game.config.height / 1.25, 'temp', 0, 0)
+        // adding obstacles to the scene
+        this.obstacle01 = new Obstacle(this, game.config.width/1.25, game.config.height/ 1.25, 'obstacle', 0, 0).setScale(1.5)
+        
         //adding physics + collider
         this.character.setCollideWorldBounds(true)
-        // this.character.body.allowGravity = true
-        // this.character.setGravityY(2600)
-
         this.physics.add.collider(this.character, this.ground)
+        this.physics.add.collider(this.obstacle01, this.ground)
+        this.physics.add.collider(this.character, this.obstacle01)
         this.character.setMaxVelocity(this.character.MAX_X_VEL, this.character.MAX_Y_VEL)
+
+
 
         // setting up keyboard inputs
         this.keys = this.input.keyboard.createCursorKeys()
             // from FSM repository
 
-
-        // creating obstacles
-        // this.obstacle01 = new Obstacle()
 
         // Game OVER flag
         this.gameOver = false
@@ -69,6 +70,7 @@ class Play extends Phaser.Scene{
         // If Game is Not Over
         if (!this.gameOver){
             this.characterFSM.step() // setting up state machine from default
+            this.obstacle01.update()
             this.background.tilePositionX += scroll_SPEED
             this.groundScroll.tilePositionX += scroll_SPEED  
             // Updating Tile Movement - temporarily at a fixed speed

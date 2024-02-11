@@ -16,8 +16,8 @@ class Menu extends Phaser.Scene {
             frameWidth: 32,
             frameHeight: 32,
         })
-        // setting up obstacle sprite sheets
-        this.load.image('obstacle', 'obstacle.png')
+        // setting up obstacle sprite sheets - temporary
+        this.load.image('obstacle', 'pixelburger2.png')
 
     }
 

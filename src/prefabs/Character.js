@@ -87,34 +87,44 @@ class RunState extends State {
         // character.jumping = false
         // console.log(character.jumping)
         if(character.body.touching.down){
-            character.jumping = character.MAX_JUMPS
+            character.jumps = character.MAX_JUMPS
+            character.jumping = false
         }
     }
     
     execute(scene, character) {
         const { left, right, up, down, space, shift } = scene.keys   
 
-        // setting up default variables 
-        // play the running animation
+        // play running animation
         //character.anims.play('running')
         //character.anims.stop()
 
         // transition to jump if pressing space
         if(character.jumps > 0 && Phaser.Input.Keyboard.DownDuration(up, 150)) {
             // if the character has not jumped
-            console.log(character.jumps)
-            
+            // console.log(character.jumps)
+            character.jumping = true
             this.stateMachine.transition('jump')
             return 
+        }
+
+        if(character.jumping && Phaser.Input.Keyboard.UpDuration(up, 50)){
+            character.jumps--
+            character.jumping = false
+        } 
+
+        if(character.body.touching.down){
+            character.jumps = character.MAX_JUMPS
+            character.jumping = false
         }
     }
 }
 
-class JumpState extends State{ // NEEDS REVISIONS
+class JumpState extends State{ // NEEDS REVISIONS - implement only fixed amount of jumps
     enter(scene, character) {
         // const { left, right, up, down, space, shift } = scene.keys           
         //character.anims.play('jumping')
-        //character.anims.stop()
+        // character.anims.stop()
         // console.log(character.jumping)
 
 
@@ -128,8 +138,6 @@ class JumpState extends State{ // NEEDS REVISIONS
             
         // })
 
-        // character is now in jump state
-        
         
     }
     execute(scene, character) {
