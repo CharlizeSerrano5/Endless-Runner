@@ -8,7 +8,8 @@ class Character extends Phaser.Physics.Arcade.Sprite {
             // unused
         
     // setting collision
-        this.body.setSize(this.width / 2, this.height / 2)
+        this.body.setSize(this.width / 2, this.height).setOffset(this.width/3, 0)
+        
         this.body.setCollideWorldBounds(true)
 
     // set character variables and settings
@@ -37,6 +38,7 @@ class Character extends Phaser.Physics.Arcade.Sprite {
         flap: new FlapState(),
         throw: new ThrowState(),
         hurt: new HurtState(),
+        duck: new DuckState(),
     }, [scene, this])  
 
     }
@@ -161,5 +163,14 @@ class HurtState extends State {
 
     execute(scene, character) {
 
+    }
+}
+
+class DuckState extends State{
+    enter(scene, character){
+        character.body.setSize(this.width / 2, this.height/2).setOffset(this.width/3, this.height/2)
+    }
+    execute(scene, character){
+        
     }
 }
