@@ -26,6 +26,7 @@ class Character extends Phaser.Physics.Arcade.Sprite {
         this.jumping = false
         this.run = false
         this.collision = false
+        this.startX = 0
     
         
         //this.physics.world.gravity.y = 2600
@@ -52,7 +53,7 @@ class IdleState extends State {
         character.run = false
         // initializing collision
         character.body.setSize(character.width / 2, character.height).setOffset(character.width/3, 0)
-
+        character.startX = character.x
         //character.setVelocity(0)
         //character.anims.play('standing')
         //character.anims.stop()

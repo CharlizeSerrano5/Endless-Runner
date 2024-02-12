@@ -56,6 +56,13 @@ class Play extends Phaser.Scene{
         // Game OVER flag
         this.gameOver = false
 
+        // Distance Score
+        topDistance = this.add.text(game.config.width/2, game.config.height/10, 'HI: ' + distance, tempConfig).setOrigin(0.5)
+        //see: https://rexrainbow.github.io/phaser3-rex-notes/docs/site/distance/
+        // Built-in Method of Phaser: var d = Phaser.Math.Distance.Between(x1, y1, x2, y2);
+        
+
+
         // debug key listener - TEMP - from FSM
         this.input.keyboard.on('keydown-D', function() {
             this.physics.world.drawDebug = this.physics.world.drawDebug ? false : true
@@ -91,6 +98,11 @@ class Play extends Phaser.Scene{
                 this.scene.start('menuScene')
             }
         }
+
+        // Distance Score
+        distance = Phaser.Math.Distance.Between(this.character.startX, 0, this.character.x, 0)
+        topDistance.text = distance
+
 
         // Collision Checks
         this.physics.add.collider(this.character, this.obstacle01, this.handleCollision, null, this)

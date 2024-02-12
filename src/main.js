@@ -8,6 +8,8 @@
 let tileSize = 35
 const SCALE = 0.5
 const scroll_SPEED = 2
+let topDistance
+let distance = 0
 
 let tempConfig = {
     fontFamily: 'Courier',
