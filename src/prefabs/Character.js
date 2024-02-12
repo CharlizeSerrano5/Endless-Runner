@@ -91,29 +91,32 @@ class RunState extends State {
         //character.anims.stop()
 
         // transition to jump if pressing space
-        if(character.jumps > 0 && Phaser.Input.Keyboard.DownDuration(up, 150)) {
-            // if the character has not jumped
-            // console.log(character.jumps)
-            character.jumping = true
-            this.stateMachine.transition('jump')
-            return 
+        if (!scene.gameOver){
+            if(character.jumps > 0 && Phaser.Input.Keyboard.DownDuration(up, 150)) {
+                // if the character has not jumped
+                // console.log(character.jumps)
+                character.jumping = true
+                this.stateMachine.transition('jump')
+                return 
+            }
+    
+            if(character.jumping && Phaser.Input.Keyboard.UpDuration(up, 50)){
+                character.jumps--
+                character.jumping = false
+            } 
+    
+            if(character.body.touching.down){
+                character.jumps = character.MAX_JUMPS
+                character.jumping = false
+            }
+    
+            // transition to duck if pressing down
+            if(down.isDown){
+                this.stateMachine.transition('duck')
+            }
+    
         }
-
-        if(character.jumping && Phaser.Input.Keyboard.UpDuration(up, 50)){
-            character.jumps--
-            character.jumping = false
-        } 
-
-        if(character.body.touching.down){
-            character.jumps = character.MAX_JUMPS
-            character.jumping = false
-        }
-
-        // transition to duck if pressing down
-        if(down.isDown){
-            this.stateMachine.transition('duck')
-        }
-
+        
     }
 }
 
