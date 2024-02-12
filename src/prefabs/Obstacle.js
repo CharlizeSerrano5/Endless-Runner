@@ -11,6 +11,9 @@ class Obstacle extends Phaser.GameObjects.Sprite{
         this.body.setSize(this.width / 2, this.height / 2)
         // this.body.setCollideWorldBounds(true)
 
+
+        this.body.allowGravity = false
+
         
     }
 

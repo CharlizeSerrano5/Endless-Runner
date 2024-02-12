@@ -19,6 +19,10 @@ class Menu extends Phaser.Scene {
         // setting up obstacle sprite sheets - temporary
         this.load.image('obstacle', 'pixelburger2.png')
 
+
+        // loading in fonts
+        //see: https://phaser.io/examples/v3/view/game-config/pixel-art-mode
+        this.load.bitmapFont('atari', 'atari-classic.png', 'atari-classic.xml');
     }
 
     create() {
@@ -51,7 +55,21 @@ class Menu extends Phaser.Scene {
 
     // Display Menu 
         //this.add.text()
+        //see: https://phaser.io/examples/v3/view/game-config/pixel-art-mode
         
+        let menuConfig = {
+            fontFamily: 'Courier',
+            fontSize: '28px',
+            backgroundColor: '#F3B141',
+            color: '#843605',
+            align: 'right',
+            padding: {
+                top: 5,
+                bottom: 5,
+            },
+            fixedWidth: 0    
+        }
+
         // setting up the inputs
 
         this.scene.start('playScene')

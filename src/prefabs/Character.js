@@ -8,7 +8,7 @@ class Character extends Phaser.Physics.Arcade.Sprite {
             // unused
         
     // setting collision
-        this.body.setSize(this.width / 2, this.height).setOffset(this.width/3, 0)
+        // this.body.setSize(this.width / 2, this.height).setOffset(this.width/3, 0)
         
         this.body.setCollideWorldBounds(true)
 
@@ -49,6 +49,9 @@ class Character extends Phaser.Physics.Arcade.Sprite {
 class IdleState extends State {
     enter(scene, character) {
         character.run = false
+        // initializing collision
+        character.body.setSize(character.width / 2, character.height).setOffset(character.width/3, 0)
+
         //character.setVelocity(0)
         //character.anims.play('standing')
         //character.anims.stop()
@@ -105,6 +108,12 @@ class RunState extends State {
             character.jumps = character.MAX_JUMPS
             character.jumping = false
         }
+
+        // transition to duck if pressing down
+        if(down.isDown){
+            this.stateMachine.transition('duck')
+        }
+
     }
 }
 
@@ -121,10 +130,10 @@ class JumpState extends State{ // NEEDS REVISIONS - implement only fixed amount 
         character.body.velocity.y = character.JUMP_VELOCITY
         this.stateMachine.transition('run')
         
-        // scene.time.delayedCall(scene.keys.up.getDuration(), () =>  {
-        //     this.stateMachine.transition('run')
-            
-        // })
+                // scene.time.delayedCall(scene.keys.up.getDuration(), () =>  {
+                //     this.stateMachine.transition('run')
+                    
+                // })
 
         
     }
@@ -134,8 +143,9 @@ class JumpState extends State{ // NEEDS REVISIONS - implement only fixed amount 
 }
 
 class FlapState extends State {
-    // considered a double jump - should only occur after first jump
-        // might combine with jump state?
+    // flap should have a duration on the second time the player hits a jump
+    // the player should only be able to glide for 5 seconds 
+
     enter(scene, character) {
         
     }
@@ -157,6 +167,7 @@ class ThrowState extends State {
 }
 
 class HurtState extends State {
+    // if the game ends then show high score
     enter(scene, character) {
         character.setVelocity(0)
     }
@@ -171,6 +182,9 @@ class DuckState extends State{
         character.body.setSize(this.width / 2, this.height/2).setOffset(this.width/3, this.height/2)
     }
     execute(scene, character){
-        
+        const { left, right, up, down, space, shift } = scene.keys   
+        if (!down.isDown){
+            this.stateMachine.transition('run')
+        }
     }
 }

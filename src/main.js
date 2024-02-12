@@ -1,13 +1,14 @@
 // Charlize Serrano
 // Title: 
-// Hours:
-// Creative Tilt:
+// Hours: 
+// Creative Tilt: 
 
 'use strict'
 
 let tileSize = 35
 const SCALE = 0.5
 const scroll_SPEED = 2
+
 
 const config = {
     type: Phaser.WEBGL,
