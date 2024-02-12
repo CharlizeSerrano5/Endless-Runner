@@ -21,13 +21,15 @@ class Play extends Phaser.Scene{
         // initializing scrolling tiles
         this.ground = this.add.group()
         for(let i = 0; i < game.config.width; i += tileSize) {
-            let groundTile = this.physics.add.sprite(i, game.config.height-tileSize, 'tile').setOrigin(0)
+            let groundTile = this.physics.add.sprite(i, game.config.height - tileSize, 'tile').setScale(SCALE).setOrigin(0)
             groundTile.body.immovable = true
             groundTile.body.allowGravity = false
             this.ground.add(groundTile)
         }
-        this.groundScroll = this.add.tileSprite(0,game.config.width,game.config.height-tileSize, tileSize, 'groundScroll').setOrigin(0,0)
 
+
+        this.groundScroll = this.add.tileSprite(0, game.config.height-tileSize, game.config.width, tileSize, 'groundScroll').setOrigin(0)
+        
         // adding character to scene
         this.character = new Character(this, game.config.width / 8, game.config.height-tileSize, 'temp', 0, 0).setOrigin(0,1)
         // adding obstacles to the scene - temporarily 3
