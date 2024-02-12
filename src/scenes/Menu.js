@@ -57,7 +57,7 @@ class Menu extends Phaser.Scene {
         //this.add.text()
         //see: https://phaser.io/examples/v3/view/game-config/pixel-art-mode
         
-
+        
 
         // setting up the inputs
 
