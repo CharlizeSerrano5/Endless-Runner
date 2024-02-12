@@ -71,17 +71,24 @@ class Play extends Phaser.Scene{
             // move to the next menu and show high score
             // console.log('Game Over')
 
-            this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', tempConfig).setOrigin(0.5)
-            this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press Key to Restart or Key for Menu', tempConfig).setOrigin(0.5)
+            // see: https://phaser.io/examples/v3/view/game-config/pixel-art-mode
+            this.add.bitmapText(game.config.width/2, 128, 'atari', 'GAME OVER').setOrigin(0.5).setScale(0.5);
+            
+            // this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', tempConfig).setOrigin(0.5)
+            // this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press Key to Restart or Key for Menu', tempConfig).setOrigin(0.5)
             this.scroll = 0
             this.obstacle01.moveSpeed = this.scroll
             this.obstacle02.moveSpeed = this.scroll
             this.obstacle03.moveSpeed = this.scroll
+
             this.character.setVelocity(0)
             // character will be reset
             // this.character.step()
             if (right.isDown){
                 this.scene.restart()    
+            }
+            if (down.isDown) {
+                this.scene.start('menuScene')
             }
         }
 
@@ -113,11 +120,11 @@ class Play extends Phaser.Scene{
 
     handleCollision(character, obstacle){
         // Function from Rocket Patrol Section
+        console.log('handle collision')
+        character.collision = true
         this.gameOver = true
         // when the player collides with any obstacle set to gameover
 
-        // the player should enter the hurt scene and enter the menu
-        // this.scene.restart()
     }
 
     

@@ -7,8 +7,10 @@ class Obstacle extends Phaser.GameObjects.Sprite{
         this.points = pointValue
         this.moveSpeed = moveSpeed
 
+
         // setting collision
-        this.body.setSize(this.width / 2, this.height / 2)
+        this.body.setImmovable(true)
+        this.body.setSize(this.width / 2, this.height).setOffset(this.width / 5, 0)
         // this.body.setCollideWorldBounds(true)
 
 

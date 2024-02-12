@@ -25,6 +25,7 @@ class Character extends Phaser.Physics.Arcade.Sprite {
         this.body.allowGravity = true
         this.jumping = false
         this.run = false
+        this.collision = false
     
         
         //this.physics.world.gravity.y = 2600
@@ -112,7 +113,14 @@ class RunState extends State {
     
             // transition to duck if pressing down
             if(down.isDown){
+                        // character.body.setSize(this.width / 2, this.height/2).setOffset(this.width/3, this.height/2)
+
                 this.stateMachine.transition('duck')
+            }
+
+            // transition to hurt if colliding
+            if(character.collision){
+                this.stateMachine.transition('hurt')
             }
     
         }
@@ -172,7 +180,10 @@ class ThrowState extends State {
 class HurtState extends State {
     // if the game ends then show high score
     enter(scene, character) {
+        // not working
         character.setVelocity(0)
+        console.log("hurt")
+        
     }
 
     execute(scene, character) {
@@ -182,7 +193,7 @@ class HurtState extends State {
 
 class DuckState extends State{
     enter(scene, character){
-        character.body.setSize(this.width / 2, this.height/2).setOffset(this.width/3, this.height/2)
+        // character.body.setSize(this.width / 2, this.height/2).setOffset(this.width/3, this.height/2)
     }
     execute(scene, character){
         const { left, right, up, down, space, shift } = scene.keys   
