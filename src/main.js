@@ -9,6 +9,18 @@ let tileSize = 35
 const SCALE = 0.5
 const scroll_SPEED = 2
 
+let tempConfig = {
+    fontFamily: 'Courier',
+    fontSize: '28px',
+    backgroundColor: '#F3B141',
+    color: '#843605',
+    align: 'right',
+    padding: {
+        top: 5,
+        bottom: 5,
+    },
+    fixedWidth: 0    
+}
 
 const config = {
     type: Phaser.WEBGL,

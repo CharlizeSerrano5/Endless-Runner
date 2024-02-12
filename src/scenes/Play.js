@@ -7,7 +7,8 @@ class Play extends Phaser.Scene{
         // for variables
         this.physics.world.gravity.y = 2600
         this.duration = 0
-        this.speed = scroll_SPEED * 60
+        this.scroll = scroll_SPEED
+        this.speed = this.scroll * 60
         this.distance = 0
         this.obstacleAmount = 3
     }
@@ -65,11 +66,23 @@ class Play extends Phaser.Scene{
     update() {
         // Game Over Events
         if (this.gameOver){
+            const { left, right, up, down, space, shift } = this.keys   
+
             // move to the next menu and show high score
-            
+            // console.log('Game Over')
+
+            this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', tempConfig).setOrigin(0.5)
+            this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press Key to Restart or Key for Menu', tempConfig).setOrigin(0.5)
+            this.scroll = 0
+            this.obstacle01.moveSpeed = this.scroll
+            this.obstacle02.moveSpeed = this.scroll
+            this.obstacle03.moveSpeed = this.scroll
+            this.character.setVelocity(0)
             // character will be reset
             // this.character.step()
-            
+            if (right.isDown){
+                this.scene.restart()    
+            }
         }
 
         // Collision Checks
@@ -90,8 +103,8 @@ class Play extends Phaser.Scene{
             this.physics.world.wrap(this.obstacle01, this.obstacle01.width/2)
 
             // scrolling tiles
-            this.background.tilePositionX += scroll_SPEED
-            this.groundScroll.tilePositionX += scroll_SPEED  
+            this.background.tilePositionX += this.scroll
+            this.groundScroll.tilePositionX += this.scroll  
                 //broken
         }    
         // Updating Tile Movement - temporarily at a fixed speed
@@ -100,11 +113,11 @@ class Play extends Phaser.Scene{
 
     handleCollision(character, obstacle){
         // Function from Rocket Patrol Section
-        
+        this.gameOver = true
         // when the player collides with any obstacle set to gameover
 
         // the player should enter the hurt scene and enter the menu
-        this.scene.restart()
+        // this.scene.restart()
     }
 
     

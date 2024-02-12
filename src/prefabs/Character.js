@@ -184,6 +184,7 @@ class DuckState extends State{
     execute(scene, character){
         const { left, right, up, down, space, shift } = scene.keys   
         if (!down.isDown){
+            console.log("not ducking")
             this.stateMachine.transition('run')
         }
     }

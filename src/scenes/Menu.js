@@ -57,18 +57,7 @@ class Menu extends Phaser.Scene {
         //this.add.text()
         //see: https://phaser.io/examples/v3/view/game-config/pixel-art-mode
         
-        let menuConfig = {
-            fontFamily: 'Courier',
-            fontSize: '28px',
-            backgroundColor: '#F3B141',
-            color: '#843605',
-            align: 'right',
-            padding: {
-                top: 5,
-                bottom: 5,
-            },
-            fixedWidth: 0    
-        }
+
 
         // setting up the inputs
 
