@@ -54,9 +54,6 @@ class Menu extends Phaser.Scene {
         
         // setting up the inputs
 
-        
-
-
         this.scene.start('playScene')
     }
 

@@ -1,21 +1,25 @@
 class Obstacle extends Phaser.GameObjects.Sprite{
-    constructor(scene, x, y, texture, frame, pointValue){
+    constructor(scene, x, y, texture, frame, moveSpeed, pointValue){
         super(scene, x, y, texture, frame)
         scene.add.existing(this)
         scene.physics.add.existing(this)
         // add physics onto obstacle
         this.points = pointValue
-        this.scrollSpeed = scroll_SPEED
+        this.moveSpeed = moveSpeed
 
         // setting collision
         this.body.setSize(this.width / 2, this.height / 2)
         this.body.setCollideWorldBounds(true)
+
+        
     }
 
     update() {
+        console.log(this.moveSpeed)
+        this.body.setVelocityX(-this.moveSpeed)
         // scroll with the background
-        console.log(this.x)
-        this.x -= this.scroll_SPEED
+        // console.log(this.x)
+        // game.physics.world.wrap(game.this, game.this.width/2)
 
         // wrap from left to right edge
         // if (this.x <= 0 - this.width) {

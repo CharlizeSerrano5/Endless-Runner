@@ -7,6 +7,7 @@ class Play extends Phaser.Scene{
         // for variables
         this.physics.world.gravity.y = 2600
         this.duration = 0;
+        this.speed = 30
     }
 
     create() {
@@ -28,7 +29,9 @@ class Play extends Phaser.Scene{
         // adding character to scene
         this.character = new Character(this, game.config.width / 8, game.config.height / 1.25, 'temp', 0, 0)
         // adding obstacles to the scene
-        this.obstacle01 = new Obstacle(this, game.config.width/1.25, game.config.height/ 1.25, 'obstacle', 0, 0).setScale(1.5)
+
+
+        this.obstacle01 = new Obstacle(this, game.config.width/1.25, game.config.height/ 1.25, 'obstacle', 0, this.speed, 20).setScale(1.5)
         
         //adding physics + collider
         this.character.setCollideWorldBounds(true)
@@ -36,7 +39,6 @@ class Play extends Phaser.Scene{
         this.physics.add.collider(this.obstacle01, this.ground)
         this.physics.add.collider(this.character, this.obstacle01)
         this.character.setMaxVelocity(this.character.MAX_X_VEL, this.character.MAX_Y_VEL)
-
 
 
         // setting up keyboard inputs
@@ -70,9 +72,15 @@ class Play extends Phaser.Scene{
         // If Game is Not Over
         if (!this.gameOver){
             this.characterFSM.step() // setting up state machine from default
-            this.obstacle01.update()
-            this.background.tilePositionX += scroll_SPEED
-            this.groundScroll.tilePositionX += scroll_SPEED  
+
+            if(this.character.run){
+                this.obstacle01.update()
+                this.physics.world.wrap(this.obstacle01, this.obstacle01.width/2)
+
+                this.background.tilePositionX += scroll_SPEED
+                this.groundScroll.tilePositionX += scroll_SPEED  
+            }
+                
             // Updating Tile Movement - temporarily at a fixed speed
 
         }            

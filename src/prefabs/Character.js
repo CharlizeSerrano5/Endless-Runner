@@ -5,6 +5,7 @@ class Character extends Phaser.Physics.Arcade.Sprite {
         scene.physics.add.existing(this)
             // add the physics body onto the character
         this.moveSpeed = 2
+            // unused
         
     // setting collision
         this.body.setSize(this.width / 2, this.height / 2)
@@ -22,6 +23,7 @@ class Character extends Phaser.Physics.Arcade.Sprite {
         this.jumps = this.MAX_JUMPS
         this.body.allowGravity = true
         this.jumping = false
+        this.run = false
     
         
         //this.physics.world.gravity.y = 2600
@@ -44,34 +46,17 @@ class Character extends Phaser.Physics.Arcade.Sprite {
 // character specific state classes
 class IdleState extends State {
     enter(scene, character) {
-        
+        character.run = false
         //character.setVelocity(0)
         //character.anims.play('standing')
         //character.anims.stop()
 
         // if not in the idle state then allow tiles to move
-        // variable initializig
-            //character.jumps = character.MAX_JUMPS
-            //character.jumping = false
-
     }
     execute(scene, character){
         // destructuring to make a local copy of the keyboard inputs
         const { left, right, up, down, space, shift } = scene.keys        
-        //const spaceKey = scene.keys.spaceKey
-
-        scene.background.tilePositionX = 0
-        scene.groundScroll.tilePositionX = 0
-
-        // transition to jump if pressing space
-        // if(Phaser.Input.Keyboard.JustDown(up)) {
-        //     console.log("jump")
-        //     this.stateMachine.transition('jump')
-        //     return 
-        // }
-
-        // START THE GAME
-        // transition to run if pressing right
+        // START THE GAME - transition to run if pressing right
         if(right.isDown){
             console.log("run")
             this.stateMachine.transition('run')
@@ -84,6 +69,7 @@ class IdleState extends State {
 
 class RunState extends State {
     enter(scene, character){
+        character.run = true
         // character.jumping = false
         // console.log(character.jumping)
         if(character.body.touching.down){
