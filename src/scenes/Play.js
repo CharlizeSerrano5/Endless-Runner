@@ -119,7 +119,7 @@ class Play extends Phaser.Scene{
             this.obstacle02.update()
             this.obstacle03.update()
             // wrapping obstacles
-            this.physics.world.wrap(this.obstacle01, this.obstacle01.width/2)
+            // this.physics.world.wrap(this.obstacle01, this.obstacle01.width/2)
 
             // scrolling tiles
             this.background.tilePositionX += this.scroll

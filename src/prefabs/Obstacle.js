@@ -29,7 +29,7 @@ class Obstacle extends Phaser.GameObjects.Sprite{
         // wrap from left to right edge
         if (this.x <= 0 - this.width) {
             //- implement later - randomize its location
-            this.x = game.config.width
+            this.x = game.config.width + (Math.random()* 300 * Math.random())
         }
     }
 
