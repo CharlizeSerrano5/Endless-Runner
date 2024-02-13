@@ -53,7 +53,6 @@ class IdleState extends State {
         character.run = false
         // initializing collision
         character.body.setSize(character.width / 2, character.height).setOffset(character.width/3, 0)
-        character.startX = character.x
         //character.setVelocity(0)
         //character.anims.play('standing')
         //character.anims.stop()
@@ -65,7 +64,7 @@ class IdleState extends State {
         const { left, right, up, down, space, shift } = scene.keys        
         // START THE GAME - transition to run if pressing right
         if(right.isDown){
-            console.log("run")
+            console.log("start game")
             this.stateMachine.transition('run')
         }
 
@@ -87,25 +86,29 @@ class RunState extends State {
     
     execute(scene, character) {
         const { left, right, up, down, space, shift } = scene.keys   
-
+        character.anims.play('run', true)
         // play running animation
-        //character.anims.play('running')
-        //character.anims.stop()
-
+        // if (!character.jumping){
+        //     character.anims.play('run', true)
+        // }
+        
         // transition to jump if pressing space
         if (!scene.gameOver){
             if(character.jumps > 0 && Phaser.Input.Keyboard.DownDuration(up, 150)) {
                 // if the character has not jumped
                 // console.log(character.jumps)
                 character.jumping = true
+                character.anims.play('jump')
+                character.body.velocity.y = character.JUMP_VELOCITY
                 this.stateMachine.transition('jump')
+                
                 return 
             }
     
-            if(character.jumping && Phaser.Input.Keyboard.UpDuration(up, 50)){
-                character.jumps--
-                character.jumping = false
-            } 
+            // if(character.jumping && Phaser.Input.Keyboard.UpDuration(up, 50)){
+            //     character.jumps--
+            //     character.jumping = false
+            // } 
     
             if(character.body.touching.down){
                 character.jumps = character.MAX_JUMPS
@@ -125,6 +128,11 @@ class RunState extends State {
             }
     
         }
+
+        if (scene.gameOver){
+            this.stateMachine.transition('idle')
+        }
+        
         
     }
 }
@@ -132,25 +140,35 @@ class RunState extends State {
 class JumpState extends State{ // NEEDS REVISIONS - implement only fixed amount of jumps
     enter(scene, character) {
         // const { left, right, up, down, space, shift } = scene.keys           
-        //character.anims.play('jumping')
+        character.anims.play('jump')
         // character.anims.stop()
         // console.log(character.jumping)
 
 
         // see: https://photonstorm.github.io/phaser3-docs/Phaser.Input.Keyboard.html#.DownDuration__anchor
             // from VariableJump.js
-        character.body.velocity.y = character.JUMP_VELOCITY
-        this.stateMachine.transition('run')
+        
+        
         
                 // scene.time.delayedCall(scene.keys.up.getDuration(), () =>  {
                 //     this.stateMachine.transition('run')
                     
                 // })
+                
 
         
     }
     execute(scene, character) {
+        const { left, right, up, down, space, shift } = scene.keys  
+        // if (character.body.touching.down){
+        //     this.stateMachine.transition('run')
+        // }
 
+        if(character.jumping && Phaser.Input.Keyboard.UpDuration(up, 50)){
+            character.jumps--
+            character.jumping = false
+            this.stateMachine.transition('run')
+        } 
     }
 }
 

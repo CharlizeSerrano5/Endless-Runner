@@ -32,11 +32,11 @@ class Play extends Phaser.Scene{
         this.groundScroll = this.add.tileSprite(0, game.config.height-tileSize, game.config.width, tileSize, 'groundScroll').setOrigin(0)
         
         // adding character to scene
-        this.character = new Character(this, game.config.width / 8, game.config.height-tileSize, 'temp', 0, 0).setOrigin(0,1)
+        this.character = new Character(this, game.config.width / 8, game.config.height-tileSize, 'penguin', 0, 0).setOrigin(0,1)
         // adding obstacles to the scene - temporarily 3
-        this.obstacle01 = new Obstacle(this, game.config.width/1.5, game.config.height-tileSize, 'obstacle', 0, this.speed, 20).setScale(1.5).setOrigin(1)
-        this.obstacle02 = new Obstacle(this, game.config.width/1, game.config.height-tileSize, 'obstacle', 0, this.speed, 20).setScale(1.5).setOrigin(1)
-        this.obstacle03 = new Obstacle(this, game.config.width/2, game.config.height-tileSize, 'obstacle', 0, this.speed, 20).setScale(1.5).setOrigin(1)
+        // this.obstacle01 = new Obstacle(this, game.config.width/1.5, game.config.height-tileSize, 'obstacle', 0, this.speed, 20).setScale(1.5).setOrigin(1)
+        // this.obstacle02 = new Obstacle(this, game.config.width/1, game.config.height-tileSize, 'obstacle', 0, this.speed, 20).setScale(1.5).setOrigin(1)
+        // this.obstacle03 = new Obstacle(this, game.config.width/2, game.config.height-tileSize, 'obstacle', 0, this.speed, 20).setScale(1.5).setOrigin(1)
  
 
         //adding physics + collider
@@ -57,11 +57,11 @@ class Play extends Phaser.Scene{
         this.gameOver = false
 
         // Distance Score
-        topDistance = this.add.text(game.config.width/2, game.config.height/10, 'HI: ' + this.distance, tempConfig).setOrigin(0.5)
+        this.distanceScore = this.add.text(game.config.width/2, game.config.height/10, '' + this.distance, tempConfig).setOrigin(0.5)
         //see: https://rexrainbow.github.io/phaser3-rex-notes/docs/site/distance/
         // Built-in Method of Phaser: var d = Phaser.Math.Distance.Between(x1, y1, x2, y2);
         
-
+        topDistance = this.add.text(game.config.width/2, game.config.height/4, 'HI: ' + this.distance, tempConfig).setOrigin(0.5)
 
         // debug key listener - TEMP - from FSM
         this.input.keyboard.on('keydown-D', function() {
@@ -81,17 +81,25 @@ class Play extends Phaser.Scene{
             // see: https://phaser.io/examples/v3/view/game-config/pixel-art-mode
             this.add.bitmapText(game.config.width/2, 128, 'atari', 'GAME OVER').setOrigin(0.5).setScale(0.5);
             
-            // this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', tempConfig).setOrigin(0.5)
-            // this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press Key to Restart or Key for Menu', tempConfig).setOrigin(0.5)
-            this.scroll = 0
-            // this.distance = 0
-            this.obstacle01.moveSpeed = this.scroll
-            this.obstacle02.moveSpeed = this.scroll
-            this.obstacle03.moveSpeed = this.scroll
+                // this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', tempConfig).setOrigin(0.5)
+                // this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press Key to Restart or Key for Menu', tempConfig).setOrigin(0.5)
+
+
+            // Top Distance Score
+            if (this.distance > distance) {
+                distance = Math.floor(this.distance)
+                topDistance = this.add.text(game.config.width/2, game.config.height/8, 'HI: ' + distance, tempConfig).setOrigin(0.5)
+            }
+
+            // Stop obstacle moving
+            // this.obstacle01.moveSpeed = 0
+            // this.obstacle02.moveSpeed = 0
+            // this.obstacle03.moveSpeed = 0
+
+            // OBSTACLES BUGGING
 
             this.character.setVelocity(0)
-            // character will be reset
-            // this.character.step()
+
             if (right.isDown){
                 this.scene.restart()    
             }
@@ -100,28 +108,25 @@ class Play extends Phaser.Scene{
             }
         }
 
-        // Distance Score
-        this.distance += this.scroll/10
-        topDistance.text = Math.floor(this.distance)
-            //something with distance is making the entire game lag
-
-
-        // Collision Checks
-        this.physics.add.collider(this.character, this.obstacle01, this.handleCollision, null, this)
-        this.physics.add.collider(this.character, this.obstacle02, this.handleCollision, null, this)
-        this.physics.add.collider(this.character, this.obstacle03, this.handleCollision, null, this)
-
-        this.physics.add.collider(this.character, this.ground)
+        
         
 
         this.characterFSM.step() // setting up state machine from default
-        if(this.character.run){
+        if(!this.gameOver){
+            // Collision Checks
+            this.physics.add.collider(this.character, this.obstacle01, this.handleCollision, null, this)
+            this.physics.add.collider(this.character, this.obstacle02, this.handleCollision, null, this)
+            this.physics.add.collider(this.character, this.obstacle03, this.handleCollision, null, this)
+            this.physics.add.collider(this.character, this.ground)
+
+            // Distance score
+            this.distance += this.scroll/10
+            this.distanceScore.text = Math.floor(this.distance)
+
             // scrolling obstacles
-            this.obstacle01.update()
-            this.obstacle02.update()
-            this.obstacle03.update()
-            // wrapping obstacles
-            // this.physics.world.wrap(this.obstacle01, this.obstacle01.width/2)
+            // this.obstacle01.update()
+            // this.obstacle02.update()
+            // this.obstacle03.update()
 
             // scrolling tiles
             this.background.tilePositionX += this.scroll
@@ -132,12 +137,14 @@ class Play extends Phaser.Scene{
 
     }
 
-    handleCollision(character, obstacle){
+    handleCollision(character, colliding_object){
         // Function from Rocket Patrol Section
         console.log('handle collision')
         character.collision = true
-        this.gameOver = true
+        
         // when the player collides with any obstacle set to gameover
+        this.gameOver = true
+        
 
     }
 

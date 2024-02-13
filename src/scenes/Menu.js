@@ -16,6 +16,10 @@ class Menu extends Phaser.Scene {
             frameWidth: 32,
             frameHeight: 32,
         })
+        this.load.spritesheet('penguin', 'penguin_spritesheet_1.png', {
+            frameWidth: 32,
+            frameHeight: 32,
+        })
         // setting up obstacle sprite sheets - temporary
         this.load.image('obstacle', 'pixelburger2.png')
 
@@ -28,21 +32,23 @@ class Menu extends Phaser.Scene {
     create() {
 
     //--Setting up Animations
-        //this.anims.create({
-            //key: 'walk'
-            //frameRate: 8 
-            //repeat: 0,
-        //})
+        this.anims.create({
+            key: 'run',
+            frameRate: 8, 
+            repeat: -1,
+            frames: this.anims.generateFrameNumbers('penguin', { start: 0, end: 3}),
+        })
+
+        this.anims.create({
+            key: 'jump',
+            frameRate: 8,
+            repeat: 0,
+            frames: this.anims.generateFrameNumbers('penguin', {start: 4, end: 7}),
+        })
 
         //this.anims.create({
-            //key: 'jump'
-            //frameRate: 8 
-            //repeat: 0,
-        //})
-
-        //this.anims.create({
-            //key: 'flap'
-            //frameRate: 8 
+            //key: 'flap',
+            //frameRate: 8,
             //repeat: 0,
         //})
 
