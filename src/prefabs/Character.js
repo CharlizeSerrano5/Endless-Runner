@@ -86,11 +86,11 @@ class RunState extends State {
     
     execute(scene, character) {
         const { left, right, up, down, space, shift } = scene.keys   
-        character.anims.play('run', true)
+        // character.anims.play('run', true)
         // play running animation
-        // if (!character.jumping){
-        //     character.anims.play('run', true)
-        // }
+        if (!character.jumping){
+            character.anims.play('run', true)
+        }
         
         // transition to jump if pressing space
         if (!scene.gameOver){
@@ -99,12 +99,12 @@ class RunState extends State {
                 // console.log(character.jumps)
                 character.jumping = true
                 character.anims.play('jump')
-                character.body.velocity.y = character.JUMP_VELOCITY
+                // character.body.velocity.y = character.JUMP_VELOCITY
                 this.stateMachine.transition('jump')
                 
                 return 
             }
-    
+            character.jumping = false
             // if(character.jumping && Phaser.Input.Keyboard.UpDuration(up, 50)){
             //     character.jumps--
             //     character.jumping = false
@@ -150,25 +150,29 @@ class JumpState extends State{ // NEEDS REVISIONS - implement only fixed amount 
         
         
         
-                // scene.time.delayedCall(scene.keys.up.getDuration(), () =>  {
-                //     this.stateMachine.transition('run')
+                scene.time.delayedCall(scene.keys.up.getDuration(), () =>  {
+                    this.stateMachine.transition('run')
                     
-                // })
-                
-
-        
+                })
     }
     execute(scene, character) {
         const { left, right, up, down, space, shift } = scene.keys  
         // if (character.body.touching.down){
         //     this.stateMachine.transition('run')
         // }
+        // character.body.velocity.y = character.JUMP_VELOCITY
+        if (character.jumping){
+            character.anims.play('jump')
+            character.body.velocity.y = character.JUMP_VELOCITY
+        }
 
-        if(character.jumping && Phaser.Input.Keyboard.UpDuration(up, 50)){
-            character.jumps--
-            character.jumping = false
-            this.stateMachine.transition('run')
-        } 
+        // if(character.jumping && Phaser.Input.Keyboard.UpDuration(up, 50)){
+        //     character.jumps--
+        //     character.jumping = false
+        //     character.body.velocity.y = 0            
+
+        //     this.stateMachine.transition('run')
+        // } 
     }
 }
 

@@ -7,7 +7,7 @@ class Menu extends Phaser.Scene {
         // setting up a path
         this.load.path = './assets/'
         // setting up background 
-        this.load.image('background', 'background.png')
+        this.load.image('background', 'snowcave_test_1.png')
         this.load.image('tile', 'ground.png')
         this.load.image('groundScroll', 'snow_tiles_1.png')
 
