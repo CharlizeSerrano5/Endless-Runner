@@ -57,10 +57,11 @@ class Play extends Phaser.Scene{
         this.gameOver = false
 
         // Distance Score
-        topDistance = this.add.text(game.config.width/2, game.config.height/10, 'HI: ' + this.distance, tempConfig).setOrigin(0.5)
+        this.distanceScore = this.add.text(game.config.width/2, game.config.height/10, 'HI: ' + this.distance, tempConfig).setOrigin(0.5)
         //see: https://rexrainbow.github.io/phaser3-rex-notes/docs/site/distance/
         // Built-in Method of Phaser: var d = Phaser.Math.Distance.Between(x1, y1, x2, y2);
         
+        topDistance = this.add.text(game.config.width/2, game.config.height/10, 'HI: ' + distance, tempConfig).setOrigin(0.5)
 
 
         // debug key listener - TEMP - from FSM
@@ -84,7 +85,15 @@ class Play extends Phaser.Scene{
             // this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', tempConfig).setOrigin(0.5)
             // this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press Key to Restart or Key for Menu', tempConfig).setOrigin(0.5)
             this.scroll = 0
-            // this.distance = 0
+            // obtaining the top distance score
+
+            if (this.distance > distance) {
+                distance = Math.floor(this.distance)
+                topDistance = this.add.text(game.config.width/2, game.config.height/8, 'HI: ' + distance, tempConfig).setOrigin(0.5)
+            } 
+            
+            
+            
             this.obstacle01.moveSpeed = this.scroll
             this.obstacle02.moveSpeed = this.scroll
             this.obstacle03.moveSpeed = this.scroll
@@ -100,9 +109,8 @@ class Play extends Phaser.Scene{
             }
         }
 
-        // Distance Score
-        this.distance += this.scroll/10
-        topDistance.text = Math.floor(this.distance)
+        
+
             //something with distance is making the entire game lag
 
 
@@ -116,6 +124,9 @@ class Play extends Phaser.Scene{
 
         this.characterFSM.step() // setting up state machine from default
         if(this.character.run){
+            // Distance Score
+            this.distance += this.scroll/10
+            this.distanceScore.text = Math.floor(this.distance)
             // scrolling obstacles
             this.obstacle01.update()
             this.obstacle02.update()
