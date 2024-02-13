@@ -57,11 +57,11 @@ class Play extends Phaser.Scene{
         this.gameOver = false
 
         // Distance Score
-        this.distanceScore = this.add.text(game.config.width/2, game.config.height/10, '' + this.distance, tempConfig).setOrigin(0.5)
+        topDistance = this.add.text(game.config.width/2, game.config.height/10, 'HI: ' + this.distance, tempConfig).setOrigin(0.5)
         //see: https://rexrainbow.github.io/phaser3-rex-notes/docs/site/distance/
         // Built-in Method of Phaser: var d = Phaser.Math.Distance.Between(x1, y1, x2, y2);
         
-        topDistance = this.add.text(game.config.width/2, game.config.height/4, 'HI: ' + this.distance, tempConfig).setOrigin(0.5)
+
 
         // debug key listener - TEMP - from FSM
         this.input.keyboard.on('keydown-D', function() {
@@ -81,22 +81,13 @@ class Play extends Phaser.Scene{
             // see: https://phaser.io/examples/v3/view/game-config/pixel-art-mode
             this.add.bitmapText(game.config.width/2, 128, 'atari', 'GAME OVER').setOrigin(0.5).setScale(0.5);
             
-                // this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', tempConfig).setOrigin(0.5)
-                // this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press Key to Restart or Key for Menu', tempConfig).setOrigin(0.5)
-
-
-            // Top Distance Score
-            if (this.distance > distance) {
-                distance = Math.floor(this.distance)
-                topDistance = this.add.text(game.config.width/2, game.config.height/8, 'HI: ' + distance, tempConfig).setOrigin(0.5)
-            }
-
-            // Stop obstacle moving
-            // this.obstacle01.moveSpeed = 0
-            // this.obstacle02.moveSpeed = 0
-            // this.obstacle03.moveSpeed = 0
-
-            // OBSTACLES BUGGING
+            // this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', tempConfig).setOrigin(0.5)
+            // this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press Key to Restart or Key for Menu', tempConfig).setOrigin(0.5)
+            this.scroll = 0
+            // this.distance = 0
+            this.obstacle01.moveSpeed = this.scroll
+            this.obstacle02.moveSpeed = this.scroll
+            this.obstacle03.moveSpeed = this.scroll
 
             this.character.setVelocity(0)
 
@@ -108,21 +99,22 @@ class Play extends Phaser.Scene{
             }
         }
 
-        
+        // Distance Score
+        this.distance += this.scroll/10
+        topDistance.text = Math.floor(this.distance)
+            //something with distance is making the entire game lag
+
+
+        // Collision Checks
+        this.physics.add.collider(this.character, this.obstacle01, this.handleCollision, null, this)
+        this.physics.add.collider(this.character, this.obstacle02, this.handleCollision, null, this)
+        this.physics.add.collider(this.character, this.obstacle03, this.handleCollision, null, this)
+
+        this.physics.add.collider(this.character, this.ground)
         
 
         this.characterFSM.step() // setting up state machine from default
-        if(!this.gameOver){
-            // Collision Checks
-            this.physics.add.collider(this.character, this.obstacle01, this.handleCollision, null, this)
-            this.physics.add.collider(this.character, this.obstacle02, this.handleCollision, null, this)
-            this.physics.add.collider(this.character, this.obstacle03, this.handleCollision, null, this)
-            this.physics.add.collider(this.character, this.ground)
-
-            // Distance score
-            this.distance += this.scroll/10
-            this.distanceScore.text = Math.floor(this.distance)
-
+        if(this.character.run){
             // scrolling obstacles
             // this.obstacle01.update()
             // this.obstacle02.update()
