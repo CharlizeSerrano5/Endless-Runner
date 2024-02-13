@@ -34,9 +34,9 @@ class Play extends Phaser.Scene{
         // adding character to scene
         this.character = new Character(this, game.config.width / 8, game.config.height-tileSize, 'temp', 0, 0).setOrigin(0,1)
         // adding obstacles to the scene - temporarily 3
-        this.obstacle01 = new Obstacle(this, game.config.width/1.25, game.config.height-tileSize, 'obstacle', 0, this.speed, 20).setScale(1.5).setOrigin(1)
+        this.obstacle01 = new Obstacle(this, game.config.width/1.5, game.config.height-tileSize, 'obstacle', 0, this.speed, 20).setScale(1.5).setOrigin(1)
         this.obstacle02 = new Obstacle(this, game.config.width/1, game.config.height-tileSize, 'obstacle', 0, this.speed, 20).setScale(1.5).setOrigin(1)
-        this.obstacle03 = new Obstacle(this, game.config.width/3, game.config.height-tileSize, 'obstacle', 0, this.speed, 20).setScale(1.5).setOrigin(1)
+        this.obstacle03 = new Obstacle(this, game.config.width/2, game.config.height-tileSize, 'obstacle', 0, this.speed, 20).setScale(1.5).setOrigin(1)
  
 
         //adding physics + collider
@@ -57,7 +57,7 @@ class Play extends Phaser.Scene{
         this.gameOver = false
 
         // Distance Score
-        topDistance = this.add.text(game.config.width/2, game.config.height/10, 'HI: ' + distance, tempConfig).setOrigin(0.5)
+        topDistance = this.add.text(game.config.width/2, game.config.height/10, 'HI: ' + this.distance, tempConfig).setOrigin(0.5)
         //see: https://rexrainbow.github.io/phaser3-rex-notes/docs/site/distance/
         // Built-in Method of Phaser: var d = Phaser.Math.Distance.Between(x1, y1, x2, y2);
         
@@ -84,6 +84,7 @@ class Play extends Phaser.Scene{
             // this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', tempConfig).setOrigin(0.5)
             // this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press Key to Restart or Key for Menu', tempConfig).setOrigin(0.5)
             this.scroll = 0
+            // this.distance = 0
             this.obstacle01.moveSpeed = this.scroll
             this.obstacle02.moveSpeed = this.scroll
             this.obstacle03.moveSpeed = this.scroll
@@ -100,8 +101,9 @@ class Play extends Phaser.Scene{
         }
 
         // Distance Score
-        distance = Phaser.Math.Distance.Between(this.character.startX, 0, this.character.x, 0)
-        topDistance.text = distance
+        this.distance += this.scroll/10
+        topDistance.text = Math.floor(this.distance)
+            //something with distance is making the entire game lag
 
 
         // Collision Checks

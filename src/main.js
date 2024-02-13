@@ -5,7 +5,7 @@
 
 'use strict'
 
-let tileSize = 35
+let tileSize = 32
 const SCALE = 0.5
 const scroll_SPEED = 2
 let topDistance
@@ -27,9 +27,9 @@ let tempConfig = {
 const config = {
     type: Phaser.WEBGL,
     //width: 640,
-    width: 400,
+    width: 256,
     //height: 480,
-    height: 300,
+    height: 224,
     pixelArt: true,
     zoom: 2,
     physics: {

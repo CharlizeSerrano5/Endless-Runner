@@ -9,7 +9,7 @@ class Menu extends Phaser.Scene {
         // setting up background 
         this.load.image('background', 'background.png')
         this.load.image('tile', 'ground.png')
-        this.load.image('groundScroll', 'ground.png')
+        this.load.image('groundScroll', 'snow_tiles_1.png')
 
         // setting up character sprite sheets
         this.load.spritesheet('temp', 'berd_pratice_1.png', {
