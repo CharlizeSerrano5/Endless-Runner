@@ -165,6 +165,10 @@ class DoubleJumpState extends State {
             this.stateMachine.transition('flap')
         }
 
+        // if (Phaser.Input.Keyboard.JustDown(down)){
+        //     this.stateMachine.transition('duck')
+        // }
+
         if (character.body.touching.down) {
             this.stateMachine.transition('run');
         }
