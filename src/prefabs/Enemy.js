@@ -31,6 +31,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite{
 class WaitState extends State {
     enter(scene, enemy) {
         enemy.setVelocity(0)
+        enemy.anims.play('follow')
         // reset to position in wait (important for charge)
         enemy.x = enemy.startX
         // console.log(enemy.x)

@@ -38,9 +38,10 @@ class Play extends Phaser.Scene{
         // adding character to scene
         this.character = new Character(this, 96, game.config.height-tileSize, 'penguin', 0, 0).setOrigin(0,1)
         // adding obstacles to the scene - temporarily 3
-        this.obstacle01 = new Obstacle(this, game.config.width/1.5, game.config.height-tileSize, 'obstacle', 0, this.speed, 20).setScale(1.5).setOrigin(1)
-        this.obstacle02 = new Obstacle(this, game.config.width/1, game.config.height-tileSize, 'obstacle', 0, this.speed, 20).setScale(1.5).setOrigin(1)
+        this.obstacle01 = new Obstacle(this, game.config.width/0.5, game.config.height-tileSize, 'obstacle', 0, this.speed, 20).setScale(1.25).setOrigin(1)
+        this.obstacle02 = new Obstacle(this, game.config.width/1, game.config.height-tileSize, 'obstacle', 0, this.speed, 20).setOrigin(1)
  
+        this.obstacle03 = new Obstacle(this, game.config.width/0.2, game.config.height-tileSize, 'obstacle', 0, this.speed, 20).setOrigin(1)
         // adding enemy to scene - test
         this.enemy = new Enemy(this, 0, game.config.height-tileSize, 'enemy', 0, this.speed, 0).setOrigin(0, 1)
 
@@ -91,12 +92,15 @@ class Play extends Phaser.Scene{
 
             this.obstacle01.moveSpeed = this.scroll
             this.obstacle02.moveSpeed = this.scroll
+            this.obstacle03.moveSpeed = this.scroll
+
 
             // set player to still
             this.character.setVelocity(0)
             this.enemy.setVelocity(0)
             // pausing music
             // this.music.stop()
+            // this.enemy.anims.play('follow')
 
             if (right.isDown){
                 this.music.stop()
@@ -143,6 +147,8 @@ class Play extends Phaser.Scene{
             // scrolling obstacles
             this.obstacle01.update()
             this.obstacle02.update()
+            this.obstacle03.update()
+
 
             // moving enemy
             this.enemy.update()
@@ -155,6 +161,7 @@ class Play extends Phaser.Scene{
             this.scroll *= this.increase_value
             this.obstacle01.moveSpeed *= this.increase_value
             this.obstacle02.moveSpeed *= this.increase_value
+            this.obstacle03.moveSpeed *= this.increase_value
             this.enemy.chargeSpeed *= this.increase_value * 1.00005
                 //broken
         }    

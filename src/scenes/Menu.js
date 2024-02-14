@@ -29,7 +29,7 @@ class Menu extends Phaser.Scene {
         })
 
         // setting up obstacle sprite sheets - temporary
-        this.load.image('obstacle', 'pixelburger2.png')
+        this.load.image('obstacle', 'icespike_1.png')
 
 
         // loading in fonts

@@ -1,7 +1,19 @@
 // Charlize Serrano
-// Title: 
-// Hours: 
+// Title: Slippery Slope
+// Hours: 30+ hours 
 // Creative Tilt: 
+    
+
+    // For my Code:
+    // I decided to implement a finite state machine with both my character and enemy so that
+    // I could develop mechanics that would branch off from each other (ie: the jump state to double jump to flap state).
+    // I also used a finite state machine for my enemy so that the enemy had a visual showcase of a charge state that would stop its
+    // y position at random intervals. 
+    
+    // For my Art: 
+    // For the art I had decided to stick with a more cute vibe and I ensure keeping all art coherent with one another by maintaining
+    // the type of border I was using for each sprite. For example, I would use pitch black outlines for areas of higher shadow and light colors for areas of light.
+    // I also made sure to use a similar color palette for each of the sprites and background.
 
 'use strict'
 
