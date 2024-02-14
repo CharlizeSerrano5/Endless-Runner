@@ -32,7 +32,7 @@ class WaitState extends State {
         enemy.setVelocity(0)
         // reset to position in wait (important for charge)
         enemy.x = enemy.startX
-        console.log(enemy.x)
+        // console.log(enemy.x)
     }
 
     execute(scene, enemy) {
@@ -49,7 +49,7 @@ class WaitState extends State {
 class FollowState extends State {
     enter(scene, enemy) {
         // play an animation
-        scene.time.delayedCall(enemy.timer + (Math.random() * 300), () =>  {
+        scene.timer = scene.time.delayedCall(enemy.timer + (Math.random() * 300), () =>  {
             enemy.anims.play('charge')
             enemy.once('animationcomplete', () => {
                 this.stateMachine.transition('charge')
@@ -58,8 +58,11 @@ class FollowState extends State {
     }
 
     execute(scene, enemy) {
-        // execute is not being reached
+
         if(scene.character.collision){
+            //see: https://newdocs.phaser.io/docs/3.55.2/focus/Phaser.Time.TimerEvent-remove
+            // if the game has ended do not run any of the scene delay items
+            scene.timer.remove(false)
             this.stateMachine.transition('wait')
         }
 
@@ -84,8 +87,9 @@ class ChargeState extends State {
     }
     
     execute(scene, enemy) {
-        // after every 15 seconds the enemy should charge onto the character
+        // after at random intervals of time between 5-8 seconds the enemy should charge onto the character
         if(scene.character.collision){
+            // if character collides with anything in the scene
             this.stateMachine.transition('wait')
         }
         enemy.body.setVelocityX(enemy.chargeSpeed * 2)

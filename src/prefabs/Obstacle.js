@@ -23,7 +23,7 @@ class Obstacle extends Phaser.GameObjects.Sprite{
         // console.log(this.moveSpeed)
         this.body.setVelocityX(-this.moveSpeed)
 
-        console.log(this.x)
+        // console.log(this.x)
 
         if (this.scene.gameOver){
             this.body.setVelocityX(0)

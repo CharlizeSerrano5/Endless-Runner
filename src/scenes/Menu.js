@@ -23,7 +23,7 @@ class Menu extends Phaser.Scene {
             frameWidth: 32,
             frameHeight: 32,
         })
-        this.load.spritesheet('enemy', 'berd_pratice_1.png', {
+        this.load.spritesheet('enemy', 'penguin_spritesheet_1.png', {
             frameWidth: 32,
             frameHeight: 32
         })
@@ -66,6 +66,19 @@ class Menu extends Phaser.Scene {
             //frameRate: 8 
             //repeat: 0,
         //})
+        this.anims.create({
+            key: 'hurt',
+            frameRate: 8, 
+            repeat: 0,
+            frames: this.anims.generateFrameNumbers('penguin', {start: 7, end: 7}),
+        })
+
+        this.anims.create({
+            key: 'charge',
+            frameRate: 8,
+            repeat: 0,
+            frames: this.anims.generateFrameNumbers('penguin', {start: 0, end: 7}),
+        })
 
         // Display Menu 
         //see: https://github.com/phaserjs/examples/blob/master/public/src/game%20config/pixel%20art%20mode.js

@@ -12,11 +12,12 @@ class Play extends Phaser.Scene{
         this.speed = this.scroll * 60
         this.distance = 0
         this.obstacleAmount = 3
+        this.music_playing = false
         
     }
 
     create() {
-        this.add.bitmapText(64, 64, 'atari', 'PHASER', 16).setOrigin(0);
+        this.add.bitmapText(64, 64, 'atari', 'PHASER', 16).setOrigin(0)
 
         
         // initializing scrolling background
@@ -34,7 +35,7 @@ class Play extends Phaser.Scene{
         this.groundScroll = this.add.tileSprite(0, game.config.height-tileSize, game.config.width, tileSize, 'groundScroll').setOrigin(0)
         
         // adding character to scene
-        this.character = new Character(this, 64, game.config.height-tileSize, 'penguin', 0, 0).setOrigin(0,1)
+        this.character = new Character(this, 96, game.config.height-tileSize, 'penguin', 0, 0).setOrigin(0,1)
         // adding obstacles to the scene - temporarily 3
         this.obstacle01 = new Obstacle(this, game.config.width/1.5, game.config.height-tileSize, 'obstacle', 0, this.speed, 20).setScale(1.5).setOrigin(1)
         this.obstacle02 = new Obstacle(this, game.config.width/1, game.config.height-tileSize, 'obstacle', 0, this.speed, 20).setScale(1.5).setOrigin(1)
@@ -50,7 +51,7 @@ class Play extends Phaser.Scene{
         this.keys = this.input.keyboard.createCursorKeys()
 
         // adding music
-        this.music = this.sound.add('music').setVolume(0.4)
+        this.music = this.sound.add('music').setVolume(0.4).setLoop(true)
 
         // Game OVER flag
         this.gameOver = false
@@ -58,8 +59,8 @@ class Play extends Phaser.Scene{
         // Distance Score - score should be implemented as a 32 wall at the top
             // this.distanceScore = this.add.text(game.config.width/2, 0, this.distance, tempConfig).setOrigin(0.5, 0)
             // topDistance = this.add.text(game.config.width/2, game.config.height/10, 'HI: ' + distance, tempConfig).setOrigin(0.5)
-        this.distanceScore = this.add.bitmapText(game.config.width - 16, 32, 'atari', this.distance, 8, 0.5).setOrigin(0.5);
-        topDistance = this.add.bitmapText(game.config.width - 64, 16 , 'atari', 'High Score: ' + distance, 8, 0.5).setOrigin(0.5);
+        this.distanceScore = this.add.bitmapText(game.config.width - 16, 32, 'atari', this.distance, 8, 0.5).setOrigin(0.5)
+        topDistance = this.add.bitmapText(game.config.width - 64, 16 , 'atari', 'High Score: ' + distance, 8, 0.5).setOrigin(0.5)
 
         // debug key listener - TEMP - from FSM
         this.input.keyboard.on('keydown-D', function() {
@@ -75,7 +76,7 @@ class Play extends Phaser.Scene{
 
             // Printing Game Over
             // see: https://phaser.io/examples/v3/view/game-config/pixel-art-mode
-            this.add.bitmapText(game.config.width/2, game.config.height/2, 'atari', 'GAME OVER', 32).setOrigin(0.5).setScale(0.5);
+            this.add.bitmapText(game.config.width/2, game.config.height/2, 'atari', 'GAME OVER', 32).setOrigin(0.5).setScale(0.5)
             
             // this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', tempConfig).setOrigin(0.5)
             // this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press Key to Restart or Key for Menu', tempConfig).setOrigin(0.5)
@@ -94,9 +95,10 @@ class Play extends Phaser.Scene{
             this.character.setVelocity(0)
 
             // pausing music
-            
+            // this.music.stop()
 
             if (right.isDown){
+                this.music.stop()
                 this.scene.restart()    
             }
             if (down.isDown) {
@@ -116,10 +118,14 @@ class Play extends Phaser.Scene{
         this.physics.add.collider(this.character, this.ground)
         this.physics.add.collider(this.enemy, this.ground)
 
-        console.log(this.gameOver)
         // play music
-        if (!this.gameOver){
+        // see: https://rexrainbow.github.io/phaser3-rex-notes/docs/site/audio/
+        if (this.music.seek == 0) {
+            this.music_playing = false
+        }
+        if (!this.gameOver && !this.music_playing && this.character.run){
             this.music.play()
+            this.music_playing = true
         }
         
         this.characterFSM.step() // setting up state machine 
@@ -151,13 +157,12 @@ class Play extends Phaser.Scene{
 
     handleCollision(character, colliding_object){
         // Function from Rocket Patrol Section
-        character.collision = true
+        this.character.collision = true
         this.scroll = 0
         // collision is broken
         // when the player collides with any obstacle set to gameover
         this.gameOver = true
         // this.music.stop()
-        this.music.setLoop(true)
         // this.music.
         
 

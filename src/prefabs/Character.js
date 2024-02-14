@@ -54,6 +54,7 @@ class IdleState extends State {
         character.run = false
         // initializing collision
         character.body.setSize(character.width / 2, character.height).setOffset(character.width/3, 0)
+        // character.body.allowGravity = true
         //character.setVelocity(0)
         //character.anims.play('standing')
         //character.anims.stop()
@@ -65,8 +66,10 @@ class IdleState extends State {
         const { left, right, up, down, space, shift } = scene.keys        
         // START THE GAME - transition to run if pressing right
         if(right.isDown){
-            console.log("start game")
+            // console.log("start game")
+            scene.music.play()
             this.stateMachine.transition('run')
+
         }
 
 
@@ -127,15 +130,12 @@ class RunState extends State {
                 this.stateMachine.transition('duck')
             }
 
-            // transition to hurt if colliding
-            if(character.collision){
-                this.stateMachine.transition('hurt')
-            }
+        
     
         }
 
         if (scene.gameOver){
-            this.stateMachine.transition('idle')
+            this.stateMachine.transition('hurt')
         }
         
         
@@ -149,7 +149,7 @@ class JumpState extends State{ // NEEDS REVISIONS - implement only fixed amount 
         console.log("jump")
 
         character.body.velocity.y = character.JUMP_VELOCITY
-        console.log(character.body.velocity.y)
+        // console.log(character.body.velocity.y)
         
     }
     execute(scene, character) {
@@ -226,7 +226,7 @@ class FlapState extends State {
 
     enter(scene, character) {
         character.anims.play('run')
-        console.log("flap");
+        // console.log("flap");
     }
     
     execute(scene, character) {
@@ -269,10 +269,11 @@ class FlapState extends State {
 class HurtState extends State {
     // if the game ends then show high score
     enter(scene, character) {
-        // not working
+        character.setTint(0xFF0000)     // turn red
         character.setVelocity(0)
         console.log("hurt")
-        
+        character.anims.play('hurt')
+        // character.body.allowGravity = false
     }
 
     execute(scene, character) {
