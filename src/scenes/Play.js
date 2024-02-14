@@ -2,6 +2,10 @@ class Play extends Phaser.Scene{
     constructor() {
         super('playScene')
     }
+    preload() {
+        this.load.bitmapFont('atari', 'atari-classic.png', 'atari-classic.xml');
+
+    }
 
     init() {
         // for variables
@@ -14,9 +18,9 @@ class Play extends Phaser.Scene{
     }
 
     create() {
-        //TEST
-        this.add.bitmapText(400, 128, 'atari', 'PHASER').setOrigin(0.5).setScale(2);
+        this.add.bitmapText(64, 64, 'atari', 'PHASER', 16).setOrigin(0);
 
+        
         // initializing scrolling background
         this.background = this.add.tileSprite(0,0, game.config.width, game.config.height, 'background').setOrigin(0,0)
         // initializing scrolling tiles
@@ -32,37 +36,30 @@ class Play extends Phaser.Scene{
         this.groundScroll = this.add.tileSprite(0, game.config.height-tileSize, game.config.width, tileSize, 'groundScroll').setOrigin(0)
         
         // adding character to scene
-        this.character = new Character(this, game.config.width / 8, game.config.height-tileSize, 'penguin', 0, 0).setOrigin(0,1)
+        this.character = new Character(this, 64, game.config.height-tileSize, 'penguin', 0, 0).setOrigin(0,1)
         // adding obstacles to the scene - temporarily 3
         // this.obstacle01 = new Obstacle(this, game.config.width/1.5, game.config.height-tileSize, 'obstacle', 0, this.speed, 20).setScale(1.5).setOrigin(1)
         // this.obstacle02 = new Obstacle(this, game.config.width/1, game.config.height-tileSize, 'obstacle', 0, this.speed, 20).setScale(1.5).setOrigin(1)
         // this.obstacle03 = new Obstacle(this, game.config.width/2, game.config.height-tileSize, 'obstacle', 0, this.speed, 20).setScale(1.5).setOrigin(1)
  
+        // adding enemy to scene - test
+        this.enemy = new Enemy(this, 16, game.config.height-tileSize, 'enemy', 0, 0).setOrigin(0, 1)
 
         //adding physics + collider
         this.character.setCollideWorldBounds(true)
         this.character.setMaxVelocity(this.character.MAX_X_VEL, this.character.MAX_Y_VEL)
 
-        // creating a wrapping area
-        //see: https://github.com/phaserjs/examples/blob/master/public/src/actions/wrap%20in%20rectangle%20with%20padding.js
-            //  When a sprite leaves this, it'll be wrapped around
-        this.wrapRect = new Phaser.Geom.Rectangle(0, 0, game.config.width, game.config.height);
-
-
-        // setting up keyboard inputs
+        // setting up keyboard inputs - FSM repository
         this.keys = this.input.keyboard.createCursorKeys()
-            // from FSM repository
 
         // Game OVER flag
         this.gameOver = false
 
-        // Distance Score
-        this.distanceScore = this.add.text(game.config.width/2, game.config.height/4, this.distance, tempConfig).setOrigin(0.5)
-        //see: https://rexrainbow.github.io/phaser3-rex-notes/docs/site/distance/
-        // Built-in Method of Phaser: var d = Phaser.Math.Distance.Between(x1, y1, x2, y2);
-        
-        topDistance = this.add.text(game.config.width/2, game.config.height/10, 'HI: ' + distance, tempConfig).setOrigin(0.5)
-
+        // Distance Score - score should be implemented as a 32 wall at the top
+            // this.distanceScore = this.add.text(game.config.width/2, 0, this.distance, tempConfig).setOrigin(0.5, 0)
+            // topDistance = this.add.text(game.config.width/2, game.config.height/10, 'HI: ' + distance, tempConfig).setOrigin(0.5)
+        this.distanceScore = this.add.bitmapText(game.config.width - 16, 32, 'atari', this.distance, 8, 0.5).setOrigin(0.5);
+        topDistance = this.add.bitmapText(game.config.width - 64, 16 , 'atari', 'High Score: ' + distance, 8, 0.5).setOrigin(0.5);
 
         // debug key listener - TEMP - from FSM
         this.input.keyboard.on('keydown-D', function() {
@@ -76,11 +73,9 @@ class Play extends Phaser.Scene{
         if (this.gameOver){
             const { left, right, up, down, space, shift } = this.keys   
 
-            // move to the next menu and show high score
-            // console.log('Game Over')
-
+            // Printing Game Over
             // see: https://phaser.io/examples/v3/view/game-config/pixel-art-mode
-            this.add.bitmapText(game.config.width/2, 128, 'atari', 'GAME OVER').setOrigin(0.5).setScale(0.5);
+            this.add.bitmapText(game.config.width/2, 16, 'atari', 'GAME OVER').setOrigin(0.5).setScale(0.5);
             
             // this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', tempConfig).setOrigin(0.5)
             // this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press Key to Restart or Key for Menu', tempConfig).setOrigin(0.5)
@@ -89,12 +84,12 @@ class Play extends Phaser.Scene{
             // obstaining the top distance score
             if(this.distance > distance){
                 distance = Math.floor(this.distance)
-                topDistance = this.add.text(game.config.width/2, game.config/height/10, 'HI: ' + distance, tempConfig).setOrigin(0.5)
+                topDistance.text = distance
             }
 
-            this.obstacle01.moveSpeed = this.scroll
-            this.obstacle02.moveSpeed = this.scroll
-            this.obstacle03.moveSpeed = this.scroll
+            // this.obstacle01.moveSpeed = this.scroll
+            // this.obstacle02.moveSpeed = this.scroll
+            // this.obstacle03.moveSpeed = this.scroll
 
             this.character.setVelocity(0)
 
@@ -113,12 +108,20 @@ class Play extends Phaser.Scene{
         this.physics.add.collider(this.character, this.obstacle01, this.handleCollision, null, this)
         this.physics.add.collider(this.character, this.obstacle02, this.handleCollision, null, this)
         this.physics.add.collider(this.character, this.obstacle03, this.handleCollision, null, this)
+        // this.physics.add.collider(this.character, this.enemy, this.handleCollision, null, this)
+            // enemy collider breaks
 
         this.physics.add.collider(this.character, this.ground)
+        this.physics.add.collider(this.enemy, this.ground)
+
+
         
 
-        this.characterFSM.step() // setting up state machine from default
+        this.characterFSM.step() // setting up state machine 
         if(this.character.run){
+            // setting up enemy
+            this.enemyFSM.step() // setting up state machine 
+
             // Distance Score
             this.distance += this.scroll/10
             this.distanceScore.text = Math.floor(this.distance)
@@ -127,6 +130,9 @@ class Play extends Phaser.Scene{
             // this.obstacle01.update()
             // this.obstacle02.update()
             // this.obstacle03.update()
+
+            // moving enemy
+            this.enemy.update()
 
             // scrolling tiles
             this.background.tilePositionX += this.scroll
@@ -139,7 +145,7 @@ class Play extends Phaser.Scene{
 
     handleCollision(character, colliding_object){
         // Function from Rocket Patrol Section
-        console.log('handle collision')
+        console.log('handle collision' + colliding_object)
         character.collision = true
         
         // when the player collides with any obstacle set to gameover

@@ -30,6 +30,7 @@ const config = {
     width: 256,
     //height: 480,
     height: 224,
+    backgroundColor: '#CDC7FF',
     pixelArt: true,
     zoom: 2,
     physics: {
