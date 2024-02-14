@@ -13,6 +13,7 @@ class Play extends Phaser.Scene{
         this.distance = 0
         this.obstacleAmount = 3
         this.music_playing = false
+        this.increase_value = 1.0002
         
     }
 
@@ -93,7 +94,7 @@ class Play extends Phaser.Scene{
 
             // set player to still
             this.character.setVelocity(0)
-
+            this.enemy.setVelocity(0)
             // pausing music
             // this.music.stop()
 
@@ -149,6 +150,12 @@ class Play extends Phaser.Scene{
             // scrolling tiles
             this.background.tilePositionX += this.scroll
             this.groundScroll.tilePositionX += this.scroll  
+            
+
+            this.scroll *= this.increase_value
+            this.obstacle01.moveSpeed *= this.increase_value
+            this.obstacle02.moveSpeed *= this.increase_value
+            this.enemy.chargeSpeed *= this.increase_value * 1.00005
                 //broken
         }    
         // Updating Tile Movement - temporarily at a fixed speed
@@ -158,6 +165,7 @@ class Play extends Phaser.Scene{
     handleCollision(character, colliding_object){
         // Function from Rocket Patrol Section
         this.character.collision = true
+        
         this.scroll = 0
         // collision is broken
         // when the player collides with any obstacle set to gameover

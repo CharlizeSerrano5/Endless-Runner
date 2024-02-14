@@ -80,12 +80,6 @@ class IdleState extends State {
 class RunState extends State {
     enter(scene, character){
         character.run = true
-        // character.jumping = false
-        // console.log(character.jumping)
-        // if(character.body.touching.down){
-        //     character.jumps = character.MAX_JUMPS
-        //     character.jumping = false
-        // }
     }
     
     execute(scene, character) {
@@ -98,27 +92,6 @@ class RunState extends State {
         
         // transition to jump if pressing space
         if (!scene.gameOver){
-            // if(character.jumps > 0 && Phaser.Input.Keyboard.DownDuration(up, 150)) {
-            //     // if the character has not jumped
-            //     // console.log(character.jumps)
-            //     character.jumping = true
-            //     character.anims.play('jump')
-            //     // character.body.velocity.y = character.JUMP_VELOCITY
-            //     this.stateMachine.transition('jump')
-                
-            //     return 
-            // }
-            // character.jumping = false
-            // // if(character.jumping && Phaser.Input.Keyboard.UpDuration(up, 50)){
-            // //     character.jumps--
-            // //     character.jumping = false
-            // // } 
-    
-            // if(character.body.touching.down){
-            //     character.jumps = character.MAX_JUMPS
-            //     character.jumping = false
-            // }
-    
             if (Phaser.Input.Keyboard.JustDown(up)) {
                 this.stateMachine.transition('jump');
             }
@@ -142,7 +115,7 @@ class RunState extends State {
     }
 }
 
-class JumpState extends State{ // NEEDS REVISIONS - implement only fixed amount of jumps
+class JumpState extends State{ 
     enter(scene, character) {     
 
         character.anims.play('jump')
@@ -155,9 +128,7 @@ class JumpState extends State{ // NEEDS REVISIONS - implement only fixed amount 
     execute(scene, character) {
         const { left, right, up, down, space, shift } = scene.keys   
 
-        // if (up.JustDown) {
-        //     this.stateMachine.transition('flap');
-        // }
+
         if (up.isDown && Phaser.Input.Keyboard.DownDuration(up, 100)) {
             character.body.velocity.y = character.JUMP_VELOCITY
         }
@@ -185,26 +156,6 @@ class DoubleJumpState extends State {
     execute(scene, character) {
         const { left, right, up, down, space, shift } = scene.keys   
 
-        // if (Phaser.Input.Keyboard.DownDuration(up, 200)) {
-        //     console.log("held down")
-        //     character.gliding = true;
-        //     scene.physics.world.gravity.y = 200;
-        //     console.log(character.gliding);
-        // }
-        // else {
-        //     character.gliding = false;
-        //     scene.physics.world.gravity.y = 2600;
-        //     console.log(character.gliding);
-        // }
-
-        // if (scene.keys.up.isDown && up.getDuration() > 100) {
-        //     console.log("flapping");
-        //     if (character.gliding <= 150) {
-        //         character.setVelocityY(20);
-        //         character.gliding++;
-        //         console.log(character.gliding)
-        //     }        
-        // }
 
         if (Phaser.Input.Keyboard.DownDuration(up, 100)) {
             character.body.velocity.y = character.JUMP_VELOCITY

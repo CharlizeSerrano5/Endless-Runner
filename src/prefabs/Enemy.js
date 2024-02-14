@@ -8,10 +8,11 @@ class Enemy extends Phaser.Physics.Arcade.Sprite{
         this.points = pointValue
         this.timer = 5000
         this.startX = this.x
+        this.charge = false
 
         //setting collision
         this.body.setImmovable(true)
-        this.body.setSize(this.width / 2, this.height).setOffset(this.width / 5, 0)
+        this.body.setSize(this.width / 2, this.height).setOffset(this.width / 3, 0)
 
         this.body.allowGravity = false
 
@@ -49,7 +50,10 @@ class WaitState extends State {
 class FollowState extends State {
     enter(scene, enemy) {
         // play an animation
+
+        enemy.anims.play('follow')
         scene.timer = scene.time.delayedCall(enemy.timer + (Math.random() * 300), () =>  {
+            enemy.charge = true    
             enemy.anims.play('charge')
             enemy.once('animationcomplete', () => {
                 this.stateMachine.transition('charge')
@@ -66,16 +70,19 @@ class FollowState extends State {
             this.stateMachine.transition('wait')
         }
 
-        if ((scene.character.y - 16 <= enemy.y) && (enemy.y <= scene.character.y + 16))  {
-            console.log("teleport");
-            enemy.y = scene.character.y;
-            enemy.setVelocityY(0);
-        }
-        else if (enemy.y > scene.character.y) {
-            enemy.setVelocityY(-250);
-        }
-        else if (enemy.y < scene.character.y) {
-            enemy.setVelocityY(250);
+        if (!enemy.charge){
+
+            if ((scene.character.y - 16 <= enemy.y) && (enemy.y <= scene.character.y + 16))  {
+                console.log("teleport");
+                enemy.y = scene.character.y;
+                enemy.setVelocityY(0);
+            }
+            else if (enemy.y > scene.character.y) {
+                enemy.setVelocityY(-250);
+            }
+            else if (enemy.y < scene.character.y) {
+                enemy.setVelocityY(250);
+            }
         }
 
     }
@@ -84,6 +91,8 @@ class FollowState extends State {
 class ChargeState extends State {
     enter(scene, enemy) {
         enemy.setVelocityY(0);
+        enemy.anims.play('follow')
+        enemy.charge = false
     }
     
     execute(scene, enemy) {

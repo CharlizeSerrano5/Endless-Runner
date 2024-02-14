@@ -23,8 +23,8 @@ class Menu extends Phaser.Scene {
             frameWidth: 32,
             frameHeight: 32,
         })
-        this.load.spritesheet('enemy', 'penguin_spritesheet_1.png', {
-            frameWidth: 32,
+        this.load.spritesheet('enemy', 'seal_spritesheet_1.png', {
+            frameWidth: 48,
             frameHeight: 32
         })
 
@@ -77,7 +77,13 @@ class Menu extends Phaser.Scene {
             key: 'charge',
             frameRate: 8,
             repeat: 0,
-            frames: this.anims.generateFrameNumbers('penguin', {start: 0, end: 7}),
+            frames: this.anims.generateFrameNumbers('enemy', {start: 0, end: 13}),
+        })
+        this.anims.create({
+            key: 'follow',
+            frameRate: 8,
+            repeat: 0,
+            frames: this.anims.generateFrameNumbers('enemy', {start: 13, end: 13}),
         })
 
         // Display Menu 
