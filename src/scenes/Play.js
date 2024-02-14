@@ -2,10 +2,7 @@ class Play extends Phaser.Scene{
     constructor() {
         super('playScene')
     }
-    preload() {
-        this.load.bitmapFont('atari', 'atari-classic.png', 'atari-classic.xml');
 
-    }
 
     init() {
         // for variables
@@ -53,7 +50,7 @@ class Play extends Phaser.Scene{
         this.keys = this.input.keyboard.createCursorKeys()
 
         // adding music
-        this.music = this.sound.add('music')
+        this.music = this.sound.add('music').setVolume(0.4)
 
         // Game OVER flag
         this.gameOver = false
@@ -161,7 +158,7 @@ class Play extends Phaser.Scene{
         this.gameOver = true
         // this.music.stop()
         this.music.setLoop(true)
-        this.music.
+        // this.music.
         
 
     }

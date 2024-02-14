@@ -1,6 +1,6 @@
 class Enemy extends Phaser.Physics.Arcade.Sprite{
     constructor(scene, x, y, texture, frame, moveSpeed, pointValue){
-        super(scene, x,y , texture, frame, pointValue)
+        super(scene, x, y, texture, frame, pointValue)
         scene.add.existing(this)
         scene.physics.add.existing(this)
         // adding physics onto enemy
@@ -32,11 +32,13 @@ class WaitState extends State {
         enemy.setVelocity(0)
         // reset to position in wait (important for charge)
         enemy.x = enemy.startX
+        console.log(enemy.x)
     }
 
     execute(scene, enemy) {
         // destructuring to make a local copy of the keyboard inputs
-        const { left, right, up, down, space, shift } = scene.keys 
+        const { left, right, up, down, space, shift } = scene.keys
+
         // START GAME
         if(!scene.gameOver){
             this.stateMachine.transition('follow')
@@ -47,45 +49,69 @@ class WaitState extends State {
 class FollowState extends State {
     enter(scene, enemy) {
         // play an animation
-        scene.time.delayedCall(enemy.timer, () =>  {
-            this.stateMachine.transition('charge')
-            
+        scene.time.delayedCall(enemy.timer + (Math.random() * 300), () =>  {
+            enemy.anims.play('charge')
+            enemy.once('animationcomplete', () => {
+                this.stateMachine.transition('charge')
+            })
         })
     }
 
     execute(scene, enemy) {
         // execute is not being reached
-        enemy.y = scene.character.y
-        // enemy.x = scene.character.x - 32
+        if(scene.character.collision){
+            this.stateMachine.transition('wait')
+        }
+
+        if ((scene.character.y - 16 <= enemy.y) && (enemy.y <= scene.character.y + 16))  {
+            console.log("teleport");
+            enemy.y = scene.character.y;
+            enemy.setVelocityY(0);
+        }
+        else if (enemy.y > scene.character.y) {
+            enemy.setVelocityY(-250);
+        }
+        else if (enemy.y < scene.character.y) {
+            enemy.setVelocityY(250);
+        }
+
     }
 }
 
 class ChargeState extends State {
     enter(scene, enemy) {
-
+        enemy.setVelocityY(0);
     }
     
     execute(scene, enemy) {
         // after every 15 seconds the enemy should charge onto the character
-            enemy.body.setVelocityX(enemy.chargeSpeed)
-            // the enemy will go into the scene
-            
-            if (enemy.x >= game.config.width){
-                // transition into original state
-                this.stateMachine.transition('wait')
-            }
+        if(scene.character.collision){
+            this.stateMachine.transition('wait')
+        }
+        enemy.body.setVelocityX(enemy.chargeSpeed * 2)
+        // the enemy will go into the scene
+        
+        if (enemy.x >= game.config.width){
+            // transition into original state
+            this.stateMachine.transition('reset')
+        }
     }
 }
 
 class ResetState extends State{
-    // enter(scene, enemy) {
-    //     enemy.x = 0
-    // }
+    enter(scene, enemy) {
+        enemy.x = 0 - enemy.width;
+        enemy.setVelocityX(20);
+    }
 
-    // execute(scene, enemy) {
-    //     // play an animation
+    execute(scene, enemy) {
+
+        if (enemy.x >= 0) {
+            enemy.setVelocityX(0)
+            this.stateMachine.transition('wait');
+        }
         
         
-    // }
+    }
 }
 

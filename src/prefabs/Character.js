@@ -40,7 +40,6 @@ class Character extends Phaser.Physics.Arcade.Sprite {
         jump: new JumpState(),
         double_jump: new DoubleJumpState(),
         flap: new FlapState(),
-        throw: new ThrowState(),
         hurt: new HurtState(),
         duck: new DuckState(),
     }, [scene, this])  
@@ -264,17 +263,6 @@ class FlapState extends State {
             this.stateMachine.transition('run');
             character.gliding = 0;
         }
-    }
-}
-
-class ThrowState extends State {
-    // throws items at enemies to temporarily pause them
-    enter(scene, character) {
-
-    }
-    
-    execute(scene, character) {
-
     }
 }
 

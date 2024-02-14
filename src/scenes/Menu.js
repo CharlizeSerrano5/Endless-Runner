@@ -88,6 +88,11 @@ class Menu extends Phaser.Scene {
             console.log("play")
             this.scene.start('playScene')
         }
+
+        if(left.isDown){
+            console.log("credits")
+            this.scene.start('creditScene')
+        }
         
     }
 }

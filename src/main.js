@@ -43,7 +43,7 @@ const config = {
             }
         }
     },
-    scene: [ Menu, Play ]
+    scene: [ Menu, Credits, Play ]
 }
 
 
