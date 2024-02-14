@@ -167,10 +167,6 @@ class JumpState extends State{ // NEEDS REVISIONS - implement only fixed amount 
             this.stateMachine.transition('double_jump');
         }
 
-        if (Phaser.Input.Keyboard.JustDown(space)) {
-            this.stateMachine.transition('flap')
-        }
-
         if (character.body.touching.down && character.body.velocity.y == 0) {
             this.stateMachine.transition('run');
         }
@@ -181,10 +177,10 @@ class JumpState extends State{ // NEEDS REVISIONS - implement only fixed amount 
 class DoubleJumpState extends State {
     enter(scene, character) {
         character.anims.play('jump')
-        console.log("jump2")
+        // console.log("jump2")
 
         character.body.velocity.y = character.JUMP_VELOCITY
-        console.log(character.body.velocity.y)
+        // console.log(character.body.velocity.y)
     }
 
     execute(scene, character) {
@@ -215,14 +211,9 @@ class DoubleJumpState extends State {
             character.body.velocity.y = character.JUMP_VELOCITY
         }
 
-        // if (Phaser.Input.Keyboard.JustDown(up)) {
-        //     this.stateMachine.transition('flap')
-        // }
-
-        if (Phaser.Input.Keyboard.JustDown(space)) {
+        if (Phaser.Input.Keyboard.JustDown(up)) {
             this.stateMachine.transition('flap')
         }
-
 
         if (character.body.touching.down) {
             this.stateMachine.transition('run');
@@ -254,12 +245,12 @@ class FlapState extends State {
         //     console.log(character.gliding);
         // }
         
-        if (scene.keys.space.isDown) {
-            console.log("flapping");
+        if (scene.keys.up.isDown) {
+            // console.log("flapping");
             if (character.gliding <= 150) {
                 character.setVelocityY(20);
                 character.gliding++;
-                console.log(character.gliding)
+                // console.log(character.gliding)
             }        
         }
         

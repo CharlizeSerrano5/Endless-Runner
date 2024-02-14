@@ -38,12 +38,11 @@ class Play extends Phaser.Scene{
         // adding character to scene
         this.character = new Character(this, 64, game.config.height-tileSize, 'penguin', 0, 0).setOrigin(0,1)
         // adding obstacles to the scene - temporarily 3
-        // this.obstacle01 = new Obstacle(this, game.config.width/1.5, game.config.height-tileSize, 'obstacle', 0, this.speed, 20).setScale(1.5).setOrigin(1)
-        // this.obstacle02 = new Obstacle(this, game.config.width/1, game.config.height-tileSize, 'obstacle', 0, this.speed, 20).setScale(1.5).setOrigin(1)
-        // this.obstacle03 = new Obstacle(this, game.config.width/2, game.config.height-tileSize, 'obstacle', 0, this.speed, 20).setScale(1.5).setOrigin(1)
+        this.obstacle01 = new Obstacle(this, game.config.width/1.5, game.config.height-tileSize, 'obstacle', 0, this.speed, 20).setScale(1.5).setOrigin(1)
+        this.obstacle02 = new Obstacle(this, game.config.width/1, game.config.height-tileSize, 'obstacle', 0, this.speed, 20).setScale(1.5).setOrigin(1)
  
         // adding enemy to scene - test
-        this.enemy = new Enemy(this, 16, game.config.height-tileSize, 'enemy', 0, 0).setOrigin(0, 1)
+        this.enemy = new Enemy(this, this.enemy, game.config.height-tileSize, 'enemy', 0, this.speed, 0).setOrigin(0, 1)
 
         //adding physics + collider
         this.character.setCollideWorldBounds(true)
@@ -75,7 +74,7 @@ class Play extends Phaser.Scene{
 
             // Printing Game Over
             // see: https://phaser.io/examples/v3/view/game-config/pixel-art-mode
-            this.add.bitmapText(game.config.width/2, 16, 'atari', 'GAME OVER').setOrigin(0.5).setScale(0.5);
+            this.add.bitmapText(game.config.width/2, game.config.height/2, 'atari', 'GAME OVER', 32).setOrigin(0.5).setScale(0.5);
             
             // this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', tempConfig).setOrigin(0.5)
             // this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press Key to Restart or Key for Menu', tempConfig).setOrigin(0.5)
@@ -84,12 +83,11 @@ class Play extends Phaser.Scene{
             // obstaining the top distance score
             if(this.distance > distance){
                 distance = Math.floor(this.distance)
-                topDistance.text = distance
+                topDistance.text = 'High Score: ' +distance
             }
 
-            // this.obstacle01.moveSpeed = this.scroll
-            // this.obstacle02.moveSpeed = this.scroll
-            // this.obstacle03.moveSpeed = this.scroll
+            this.obstacle01.moveSpeed = this.scroll
+            this.obstacle02.moveSpeed = this.scroll
 
             this.character.setVelocity(0)
 
@@ -108,7 +106,7 @@ class Play extends Phaser.Scene{
         this.physics.add.collider(this.character, this.obstacle01, this.handleCollision, null, this)
         this.physics.add.collider(this.character, this.obstacle02, this.handleCollision, null, this)
         this.physics.add.collider(this.character, this.obstacle03, this.handleCollision, null, this)
-        // this.physics.add.collider(this.character, this.enemy, this.handleCollision, null, this)
+        this.physics.add.collider(this.character, this.enemy, this.handleCollision, null, this)
             // enemy collider breaks
 
         this.physics.add.collider(this.character, this.ground)
@@ -127,9 +125,8 @@ class Play extends Phaser.Scene{
             this.distanceScore.text = Math.floor(this.distance)
 
             // scrolling obstacles
-            // this.obstacle01.update()
-            // this.obstacle02.update()
-            // this.obstacle03.update()
+            this.obstacle01.update()
+            this.obstacle02.update()
 
             // moving enemy
             this.enemy.update()
@@ -145,9 +142,9 @@ class Play extends Phaser.Scene{
 
     handleCollision(character, colliding_object){
         // Function from Rocket Patrol Section
-        console.log('handle collision' + colliding_object)
         character.collision = true
-        
+        this.scroll = 0
+        // collision is broken
         // when the player collides with any obstacle set to gameover
         this.gameOver = true
         

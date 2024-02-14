@@ -22,6 +22,12 @@ class Obstacle extends Phaser.GameObjects.Sprite{
     update() {
         // console.log(this.moveSpeed)
         this.body.setVelocityX(-this.moveSpeed)
+
+        console.log(this.x)
+
+        if (this.scene.gameOver){
+            this.body.setVelocityX(0)
+        }
         // scroll with the background
         // console.log(this.x)
         // game.physics.world.wrap(game.this, game.this.width/2)
