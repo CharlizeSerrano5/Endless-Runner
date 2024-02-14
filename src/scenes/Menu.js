@@ -11,6 +11,9 @@ class Menu extends Phaser.Scene {
         this.load.image('tile', 'snow_tiles_1.png')
         this.load.image('groundScroll', 'snow_tiles_1.png')
 
+        // setting up audio
+        this.load.audio('music', 'christmas-journey-128873.mp3')
+
         // setting up character sprite sheets
         // this.load.spritesheet('temp', 'berd_pratice_1.png', {
         //     frameWidth: 32,

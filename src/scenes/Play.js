@@ -15,6 +15,7 @@ class Play extends Phaser.Scene{
         this.speed = this.scroll * 60
         this.distance = 0
         this.obstacleAmount = 3
+        
     }
 
     create() {
@@ -42,7 +43,7 @@ class Play extends Phaser.Scene{
         this.obstacle02 = new Obstacle(this, game.config.width/1, game.config.height-tileSize, 'obstacle', 0, this.speed, 20).setScale(1.5).setOrigin(1)
  
         // adding enemy to scene - test
-        this.enemy = new Enemy(this, this.enemy, game.config.height-tileSize, 'enemy', 0, this.speed, 0).setOrigin(0, 1)
+        this.enemy = new Enemy(this, 0, game.config.height-tileSize, 'enemy', 0, this.speed, 0).setOrigin(0, 1)
 
         //adding physics + collider
         this.character.setCollideWorldBounds(true)
@@ -50,6 +51,9 @@ class Play extends Phaser.Scene{
 
         // setting up keyboard inputs - FSM repository
         this.keys = this.input.keyboard.createCursorKeys()
+
+        // adding music
+        this.music = this.sound.add('music')
 
         // Game OVER flag
         this.gameOver = false
@@ -89,7 +93,11 @@ class Play extends Phaser.Scene{
             this.obstacle01.moveSpeed = this.scroll
             this.obstacle02.moveSpeed = this.scroll
 
+            // set player to still
             this.character.setVelocity(0)
+
+            // pausing music
+            
 
             if (right.isDown){
                 this.scene.restart()    
@@ -107,16 +115,20 @@ class Play extends Phaser.Scene{
         this.physics.add.collider(this.character, this.obstacle02, this.handleCollision, null, this)
         this.physics.add.collider(this.character, this.obstacle03, this.handleCollision, null, this)
         this.physics.add.collider(this.character, this.enemy, this.handleCollision, null, this)
-            // enemy collider breaks
-
+            
         this.physics.add.collider(this.character, this.ground)
         this.physics.add.collider(this.enemy, this.ground)
 
-
+        console.log(this.gameOver)
+        // play music
+        if (!this.gameOver){
+            this.music.play()
+        }
         
-
         this.characterFSM.step() // setting up state machine 
         if(this.character.run){
+            
+
             // setting up enemy
             this.enemyFSM.step() // setting up state machine 
 
@@ -147,6 +159,9 @@ class Play extends Phaser.Scene{
         // collision is broken
         // when the player collides with any obstacle set to gameover
         this.gameOver = true
+        // this.music.stop()
+        this.music.setLoop(true)
+        this.music.
         
 
     }
