@@ -14,9 +14,11 @@ class Menu extends Phaser.Scene {
         // setting up audio
         this.load.audio('music', 'christmas-journey-128873.mp3')
         this.load.audio('menu_music', 'menu_frozen.mp3')
+        this.load.audio('boop', 'boop.mp3')
+        this.load.audio('jump', 'swing-whoosh.mp3')
 
         // setting up character and enemy sprite sheets
-        this.load.spritesheet('penguin', 'penguin_spritesheet_1.png', {
+        this.load.spritesheet('penguin', 'penguin_spritesheet.png', {
             frameWidth: 32,
             frameHeight: 32,
         })
@@ -50,21 +52,17 @@ class Menu extends Phaser.Scene {
             repeat: 0,
             frames: this.anims.generateFrameNumbers('penguin', {start: 4, end: 7}),
         })
-        //this.anims.create({
-            //key: 'flap',
-            //frameRate: 8,
-            //repeat: 0,
-        //})
-        //this.anims.create({
-            //key: 'duck'
-            //frameRate: 8 
-            //repeat: 0,
-        //})
         this.anims.create({
             key: 'hurt',
             frameRate: 8, 
             repeat: 0,
             frames: this.anims.generateFrameNumbers('penguin', {start: 7, end: 7}),
+        })
+        this.anims.create({
+            key: 'duck',
+            frameRate: 8,
+            repeat: 0,
+            frames: this.anims.generateFrameNumbers('penguin', {start: 8, end: 8}),
         })
 
         this.anims.create({
@@ -81,7 +79,7 @@ class Menu extends Phaser.Scene {
         })
 
         // Title
-        this.add.bitmapText(64,48, 'atari', 'Slippery Slope', 16).setOrigin(0.25);
+        this.add.bitmapText(72,48, 'atari', 'Slippery Seal', 16).setOrigin(0.25);
 
         // Display Menu 
         //see: https://github.com/phaserjs/examples/blob/master/public/src/game%20config/pixel%20art%20mode.js
@@ -94,8 +92,10 @@ class Menu extends Phaser.Scene {
         ]
         this.add.bitmapText(game.config.width/2, game.config.height/2, 'atari', controls, 8, 0.5).setOrigin(0.5);
         this.add.bitmapText(game.config.width/2, 16, 'atari', 'High Score: ' + distance, 8, 0.5).setOrigin(0.5);
-        this.add.bitmapText(game.config.width/2, game.config.height - 16, 'atari', 'Left Key for CREDITS ', 8, 0.5).setOrigin(0.5, 0);
-        this.add.bitmapText(game.config.width/2, game.config.height - 32, 'atari', 'Right Key to PLAY ', 8, 0.5).setOrigin(0.5, 0);
+        this.add.bitmapText(game.config.width/2, game.config.height - 16, 'atari', 'Left Key for CREDITS', 8, 0.5).setOrigin(0.5, 0);
+        this.add.bitmapText(game.config.width/2, game.config.height - 32, 'atari', 'Right Key to PLAY', 8, 0.5).setOrigin(0.5, 0);
+        this.add.bitmapText(game.config.width/2, game.config.height - 64, 'atari', 'Challenge - Boop (jump on) seal', 8, 0.5).setOrigin(0.5, 0);
+
 
 
         // setting up inputs

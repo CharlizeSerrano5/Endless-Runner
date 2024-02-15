@@ -13,7 +13,7 @@ class Play extends Phaser.Scene{
         this.distance = 0
         this.obstacleAmount = 3
         this.music_playing = false
-        this.increase_value = 1.0002
+        this.increase_value = 1.0001
         
     }
 
@@ -38,10 +38,10 @@ class Play extends Phaser.Scene{
         // adding character to scene
         this.character = new Character(this, 96, game.config.height-tileSize, 'penguin', 0, 0).setOrigin(0,1)
         // adding obstacles to the scene - temporarily 3
-        this.obstacle01 = new Obstacle(this, game.config.width/0.5, game.config.height-tileSize, 'obstacle', 0, this.speed, 20).setScale(1.25).setOrigin(1)
-        this.obstacle02 = new Obstacle(this, game.config.width/1, game.config.height-tileSize, 'obstacle', 0, this.speed, 20).setOrigin(1)
+        this.obstacle01 = new Obstacle(this, game.config.width/0.5, game.config.height-tileSize, 'obstacle', 0, this.speed, 20, 0).setScale(1.25).setOrigin(1)
+        this.obstacle02 = new Obstacle(this, game.config.width/1, game.config.height-tileSize, 'obstacle', 0, this.speed, 20, 20).setOrigin(1)
  
-        this.obstacle03 = new Obstacle(this, game.config.width/0.2, game.config.height-tileSize, 'obstacle', 0, this.speed, 20).setOrigin(1)
+        this.obstacle03 = new Obstacle(this, game.config.width/0.2, game.config.height-tileSize, 'obstacle', 0, this.speed, 40).setOrigin(1)
         // adding enemy to scene - test
         this.enemy = new Enemy(this, 0, game.config.height-tileSize, 'enemy', 13, this.speed, 0).setOrigin(0, 1)
 
@@ -49,11 +49,13 @@ class Play extends Phaser.Scene{
         this.character.setCollideWorldBounds(true)
         this.character.setMaxVelocity(this.character.MAX_X_VEL, this.character.MAX_Y_VEL)
 
+
         // setting up keyboard inputs - FSM repository
         this.keys = this.input.keyboard.createCursorKeys()
 
         // adding music
         this.music = this.sound.add('music').setVolume(0.4).setLoop(true)
+        this.boop_sound = this.sound.add('boop').setVolume(12)
 
         // Game OVER flag
         this.gameOver = false
@@ -69,6 +71,16 @@ class Play extends Phaser.Scene{
             this.physics.world.drawDebug = this.physics.world.drawDebug ? false : true
             this.physics.world.debugGraphic.clear()
         }, this)
+
+        // Collision Checks
+        this.physics.add.collider(this.character, this.obstacle01, this.handleCollision, null, this)
+        this.physics.add.collider(this.character, this.obstacle02, this.handleCollision, null, this)
+        this.physics.add.collider(this.character, this.obstacle03, this.handleCollision, null, this)
+        //this.physics.add.collider(this.character, this.enemy, this.handleCollision, null, this)
+        this.physics.add.collider(this.character, this.enemy, this.handleEnemyCollision, null, this)
+            
+        this.physics.add.collider(this.character, this.ground)
+        this.physics.add.collider(this.enemy, this.ground)
     }
 
     update() {
@@ -115,18 +127,6 @@ class Play extends Phaser.Scene{
             }
         }
 
-       
-
-
-        // Collision Checks
-        this.physics.add.collider(this.character, this.obstacle01, this.handleCollision, null, this)
-        this.physics.add.collider(this.character, this.obstacle02, this.handleCollision, null, this)
-        this.physics.add.collider(this.character, this.obstacle03, this.handleCollision, null, this)
-        this.physics.add.collider(this.character, this.enemy, this.handleCollision, null, this)
-            
-        this.physics.add.collider(this.character, this.ground)
-        this.physics.add.collider(this.enemy, this.ground)
-
         // play music
         // see: https://rexrainbow.github.io/phaser3-rex-notes/docs/site/audio/
         if (this.music.seek == 0) {
@@ -168,6 +168,8 @@ class Play extends Phaser.Scene{
             this.obstacle03.moveSpeed *= this.increase_value
             this.enemy.chargeSpeed *= this.increase_value * 1.00005
                 //broken
+
+            //console.log(this.enemy.boop)
         }    
         // Updating Tile Movement - temporarily at a fixed speed
 
@@ -185,6 +187,23 @@ class Play extends Phaser.Scene{
         // this.music.
         
 
+    }
+
+    handleEnemyCollision(character, enemy) {
+        console.log(`char: (${character.x}, ${character.y})`)
+        console.log(`ene: (${enemy.y}, ${enemy.y})`)
+        if (character.y + 29 < enemy.y && ((character.x >= enemy.x && character.x <= enemy.x + 46) || (character.x + 29 >= enemy.x && character.x <= enemy.x + 46))) {
+            console.log("booped")
+            enemy.boop = true
+            this.boop_sound.play()
+            character.setVelocityY(-300)
+            character.gliding = 0;
+            this.distance += 50 * this.increase_value;
+        }
+        else {
+            console.log("hit")
+            this.handleCollision(character, enemy)
+        }
     }
 
     

@@ -9,19 +9,20 @@ class Enemy extends Phaser.Physics.Arcade.Sprite{
         this.timer = 5000
         this.startX = this.x
         this.charge = false
+        this.boop = false;
 
         //setting collision
-        this.body.setImmovable(true)
+        this.body.setImmovable = true;
         this.body.setSize(this.width, this.height).setOffset(0, 0)
 
-        this.body.allowGravity = false
-
+        this.body.allowGravity = false;
         
         // initializing state machine managing enemy
         scene.enemyFSM = new StateMachine('wait', {
             wait: new WaitState(),
             follow: new FollowState(),
             charge: new ChargeState(),
+            stun: new StunState(),
             reset: new ResetState(),
         }, [scene, this])
     }
@@ -33,7 +34,7 @@ class WaitState extends State {
         enemy.setVelocity(0)
         enemy.anims.play('follow')
         // reset to position in wait (important for charge)
-        enemy.x = enemy.startX
+        //enemy.x = enemy.startX
         // console.log(enemy.x)
     }
 
@@ -74,7 +75,6 @@ class FollowState extends State {
         if (!enemy.charge){
 
             if ((scene.character.y - 16 <= enemy.y) && (enemy.y <= scene.character.y + 16))  {
-                console.log("teleport");
                 enemy.y = scene.character.y;
                 enemy.setVelocityY(0);
             }
@@ -102,6 +102,11 @@ class ChargeState extends State {
             // if character collides with anything in the scene
             this.stateMachine.transition('wait')
         }
+
+        if (enemy.boop == true) {
+            this.stateMachine.transition('stun')
+        }
+
         enemy.body.setVelocityX(enemy.chargeSpeed * 2)
         // the enemy will go into the scene
         
@@ -112,13 +117,56 @@ class ChargeState extends State {
     }
 }
 
-class ResetState extends State{
+class StunState extends State {
     enter(scene, enemy) {
-        enemy.x = 0 - enemy.width;
-        enemy.setVelocityX(20);
+        enemy.body.setVelocityX(0);
+        enemy.anims.play('wait')
+        // console.log("boooooooooooped")
     }
 
     execute(scene, enemy) {
+        if(scene.character.collision){
+            // if character collides with anything in the scene
+            this.stateMachine.transition('follow')
+        }
+
+        if (enemy.body.touching.down) {
+            // console.log("grounded")
+            enemy.booped = false;
+            enemy.body.setVelocityY(0);
+            enemy.body.setVelocityX(-200);
+            // scene.timer = scene.time.delayedCall(enemy.timer + (Math.random() * 300), () =>  {
+            //     enemy.body.setVelocityX(-50)
+            // })
+        }
+        
+        if (enemy.booped == true) {
+            enemy.body.setVelocityX(0);
+            enemy.body.setVelocityY(80);
+        }
+            
+        
+
+        if (enemy.x <= 0 - enemy.width || enemy.x >= game.config.width) {
+            enemy.booped = false
+            // console.log("false boop")
+            this.stateMachine.transition('reset');
+        }
+    }
+}
+
+class ResetState extends State{
+    enter(scene, enemy) {
+        enemy.x = 0 - enemy.width
+        enemy.setVelocityX(20)
+        enemy.setVelocityY(0)
+    }
+
+    execute(scene, enemy) {
+        if(scene.character.collision){
+            // if character collides with anything in the scene
+            this.stateMachine.transition('wait')
+        }
 
         if (enemy.x >= 0) {
             enemy.setVelocityX(0)

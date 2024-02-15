@@ -98,13 +98,8 @@ class RunState extends State {
 
             // transition to duck if pressing down
             if(down.isDown){
-                        // character.body.setSize(this.width / 2, this.height/2).setOffset(this.width/3, this.height/2)
-
                 this.stateMachine.transition('duck')
             }
-
-        
-    
         }
 
         if (scene.gameOver){
@@ -119,8 +114,10 @@ class JumpState extends State{
     enter(scene, character) {     
 
         character.anims.play('jump')
-        console.log("jump")
-
+        // console.log("jump")
+        
+        scene.jump_sound = scene.sound.add('jump').setVolume(2)
+        scene.jump_sound.play() 
         character.body.velocity.y = character.JUMP_VELOCITY
         // console.log(character.body.velocity.y)
         
@@ -128,6 +125,9 @@ class JumpState extends State{
     execute(scene, character) {
         const { left, right, up, down, space, shift } = scene.keys   
 
+        if (scene.gameOver){
+            this.stateMachine.transition('hurt')
+        }
 
         if (up.isDown && Phaser.Input.Keyboard.DownDuration(up, 100)) {
             character.body.velocity.y = character.JUMP_VELOCITY
@@ -147,6 +147,7 @@ class JumpState extends State{
 class DoubleJumpState extends State {
     enter(scene, character) {
         character.anims.play('jump')
+        scene.jump_sound.play() 
         // console.log("jump2")
 
         character.body.velocity.y = character.JUMP_VELOCITY
@@ -154,8 +155,11 @@ class DoubleJumpState extends State {
     }
 
     execute(scene, character) {
-        const { left, right, up, down, space, shift } = scene.keys   
-
+        const { left, right, up, down, space, shift } = scene.keys
+        
+        if (scene.gameOver){
+            this.stateMachine.transition('hurt')
+        }
 
         if (Phaser.Input.Keyboard.DownDuration(up, 100)) {
             character.body.velocity.y = character.JUMP_VELOCITY
@@ -185,19 +189,12 @@ class FlapState extends State {
     }
     
     execute(scene, character) {
-        const { left, right, up, down, space, shift } = scene.keys   
+        const { left, right, up, down, space, shift } = scene.keys
 
-        // if (Phaser.Input.Keyboard.DownDuration(up, 200)) {
-        //     console.log("held down")
-        //     character.gliding = true;
-        //     scene.physics.world.gravity.y = 200;
-        //     console.log(character.gliding);
-        // }
-        // else {
-        //     character.gliding = false;
-        //     scene.physics.world.gravity.y = 2600;
-        //     console.log(character.gliding);
-        // }
+        if (scene.gameOver){
+            this.stateMachine.transition('hurt')
+        }
+
         
         if (scene.keys.up.isDown) {
             // console.log("flapping");
@@ -208,11 +205,6 @@ class FlapState extends State {
             }        
         }
         
-        //     scene.physics.world.gravity.y = 60;
-        // }
-        // else {
-        //     scene.physics.world.gravity.y = 2600;
-        // }
 
         if (character.body.touching.down) {
             this.stateMachine.transition('run');
@@ -226,13 +218,9 @@ class HurtState extends State {
     enter(scene, character) {
         character.setTint(0xFF0000)     // turn red
         character.setVelocity(0)
-        console.log("hurt")
+        // console.log("hurt")
         character.anims.play('hurt')
         // character.body.allowGravity = false
-    }
-
-    execute(scene, character) {
-
     }
 }
 
@@ -243,8 +231,14 @@ class DuckState extends State{
     }
     execute(scene, character){
         const { left, right, up, down, space, shift } = scene.keys   
+
+        if (scene.gameOver){
+            this.stateMachine.transition('hurt')
+        }
+
         if (down.isDown){
             character.setSize(character.width / 2, character.height/2).setOffset(character.width/3, character.height/2)
+            character.anims.play('duck')
             // console.log("not ducking")
             // this.stateMachine.transition('run')
             // character.body.setSize(character.width / 2, character.height).setOffset(character.width/3, 0)
