@@ -43,7 +43,7 @@ class Play extends Phaser.Scene{
  
         this.obstacle03 = new Obstacle(this, game.config.width/0.2, game.config.height-tileSize, 'obstacle', 0, this.speed, 20).setOrigin(1)
         // adding enemy to scene - test
-        this.enemy = new Enemy(this, 0, game.config.height-tileSize, 'enemy', 0, this.speed, 0).setOrigin(0, 1)
+        this.enemy = new Enemy(this, 0, game.config.height-tileSize, 'enemy', 13, this.speed, 0).setOrigin(0, 1)
 
         //adding physics + collider
         this.character.setCollideWorldBounds(true)
@@ -78,7 +78,9 @@ class Play extends Phaser.Scene{
 
             // Printing Game Over
             // see: https://phaser.io/examples/v3/view/game-config/pixel-art-mode
-            this.add.bitmapText(game.config.width/2, game.config.height/2, 'atari', 'GAME OVER', 32).setOrigin(0.5).setScale(0.5)
+            this.add.bitmapText(game.config.width/2, game.config.height/2 - 48, 'atari', 'GAME OVER', 32).setOrigin(0.5).setScale(0.5)
+            this.add.bitmapText(game.config.width/2, game.config.height/2, 'atari', 'Down Key for Menu', 8).setOrigin(0.5)
+            this.add.bitmapText(game.config.width/2, game.config.height/2-16, 'atari', 'Right Key to Restart', 8).setOrigin(0.5)
             
             // this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', tempConfig).setOrigin(0.5)
             // this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press Key to Restart or Key for Menu', tempConfig).setOrigin(0.5)
@@ -107,7 +109,9 @@ class Play extends Phaser.Scene{
                 this.scene.restart()    
             }
             if (down.isDown) {
+                this.music.stop()
                 this.scene.start('menuScene')
+                
             }
         }
 

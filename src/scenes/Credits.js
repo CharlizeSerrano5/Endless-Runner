@@ -21,7 +21,7 @@ class Credits extends Phaser.Scene {
 
     update() {
         const { left, right, up, down, space, shift } = this.keys   
-        if (right.isDown){
+        if (down.isDown  || left.isDown || right.isDown || up.isDown){
             console.log("Menu")
             this.scene.start('menuScene')
         }

@@ -13,12 +13,9 @@ class Menu extends Phaser.Scene {
 
         // setting up audio
         this.load.audio('music', 'christmas-journey-128873.mp3')
+        this.load.audio('menu_music', 'menu_frozen.mp3')
 
-        // setting up character sprite sheets
-        // this.load.spritesheet('temp', 'berd_pratice_1.png', {
-        //     frameWidth: 32,
-        //     frameHeight: 32,
-        // })
+        // setting up character and enemy sprite sheets
         this.load.spritesheet('penguin', 'penguin_spritesheet_1.png', {
             frameWidth: 32,
             frameHeight: 32,
@@ -28,10 +25,8 @@ class Menu extends Phaser.Scene {
             frameHeight: 32
         })
 
-        // setting up obstacle sprite sheets - temporary
+        // setting up obstacle sprite sheets
         this.load.image('obstacle', 'icespike_1.png')
-
-
         // loading in fonts
         //see: https://phaser.io/examples/v3/view/game-config/pixel-art-mode
         this.load.bitmapFont('atari', 'atari-classic.png', 'atari-classic.xml');
@@ -40,10 +35,9 @@ class Menu extends Phaser.Scene {
     }
 
     create() {
-        // Title
-        this.add.bitmapText(64, 64, 'atari', 'Slippery Slope', 16).setOrigin(0.25);
+        
 
-          //--Setting up Animations
+        //--Setting up Animations
         this.anims.create({
             key: 'run',
             frameRate: 8, 
@@ -86,29 +80,46 @@ class Menu extends Phaser.Scene {
             frames: this.anims.generateFrameNumbers('enemy', {start: 13, end: 13}),
         })
 
+        // Title
+        this.add.bitmapText(64,48, 'atari', 'Slippery Slope', 16).setOrigin(0.25);
+
         // Display Menu 
         //see: https://github.com/phaserjs/examples/blob/master/public/src/game%20config/pixel%20art%20mode.js
-    
+        
         const controls = ['Move: Right key to start run.\n',
-                          'Jump: Up key to jump.\n',
-                          'Double Jump: Up key twice.'
+                          'Jump: Up to jump.\n',
+                          'Double Jump: Up key in air.\n',
+                          'Flap: Hold Up after Double Jump.\n',
+                          'Duck: Down Key'
         ]
         this.add.bitmapText(game.config.width/2, game.config.height/2, 'atari', controls, 8, 0.5).setOrigin(0.5);
-        this.add.bitmapText(game.config.width/2, 32, 'atari', 'High Score: ' + distance, 8, 0.5).setOrigin(0.5);
+        this.add.bitmapText(game.config.width/2, 16, 'atari', 'High Score: ' + distance, 8, 0.5).setOrigin(0.5);
+        this.add.bitmapText(game.config.width/2, game.config.height - 16, 'atari', 'Left Key for CREDITS ', 8, 0.5).setOrigin(0.5, 0);
+        this.add.bitmapText(game.config.width/2, game.config.height - 32, 'atari', 'Right Key to PLAY ', 8, 0.5).setOrigin(0.5, 0);
+
 
         // setting up inputs
         this.keys = this.input.keyboard.createCursorKeys()
+
+
+        // setting up menu music
+        console.log('test')
+        this.menuMusic = this.sound.add('menu_music').setLoop(true).setVolume(0.4)
+        this.menuMusic.play()
+
     }
 
     update(){
         const { left, right, up, down, space, shift } = this.keys   
 
         if(right.isDown){
+            this.menuMusic.stop()
             console.log("play")
             this.scene.start('playScene')
         }
 
         if(left.isDown){
+            this.menuMusic.stop()
             console.log("credits")
             this.scene.start('creditScene')
         }

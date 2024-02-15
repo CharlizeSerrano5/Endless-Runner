@@ -12,7 +12,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite{
 
         //setting collision
         this.body.setImmovable(true)
-        this.body.setSize(this.width / 2, this.height).setOffset(this.width / 3, 0)
+        this.body.setSize(this.width, this.height).setOffset(0, 0)
 
         this.body.allowGravity = false
 
