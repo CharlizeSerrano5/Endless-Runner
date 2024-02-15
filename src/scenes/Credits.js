@@ -14,7 +14,12 @@ class Credits extends Phaser.Scene {
                          'floraphonic, verbovets,',
                          'geoffharvey, Jofae\n'
         ]
+        // All Music
+    //https://pixabay.com/sound-effects/bloop-4-186533/
+// https://pixabay.com/music/modern-classical-frozen-175197/
+// https://pixabay.com/music/christmas-christmas-journey-128873/
 
+// https://pixabay.com/sound-effects/swing-whoosh-110410/
         this.add.bitmapText(game.config.width/2, game.config.height/2, 'atari', credits, 8, 0.5).setOrigin(0.5);
         this.add.bitmapText(game.config.width/2, game.config.height - 16, 'atari', 'Any Arrow Key for Menu', 8, 0.5).setOrigin(0.5, 0);
 
