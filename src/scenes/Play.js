@@ -67,10 +67,10 @@ class Play extends Phaser.Scene{
         topDistance = this.add.bitmapText(game.config.width - 64, 16 , 'atari', 'High Score: ' + distance, 8, 0.5).setOrigin(0.5)
 
         // debug key listener - TEMP - from FSM
-        this.input.keyboard.on('keydown-D', function() {
-            this.physics.world.drawDebug = this.physics.world.drawDebug ? false : true
-            this.physics.world.debugGraphic.clear()
-        }, this)
+        // this.input.keyboard.on('keydown-D', function() {
+        //     this.physics.world.drawDebug = this.physics.world.drawDebug ? false : true
+        //     this.physics.world.debugGraphic.clear()
+        // }, this)
 
         // Collision Checks
         this.physics.add.collider(this.character, this.obstacle01, this.handleCollision, null, this)
