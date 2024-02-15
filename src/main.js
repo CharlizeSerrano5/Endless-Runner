@@ -23,6 +23,9 @@
     // For instance, I am most proud of the seal's charge animation as I feel I created a long enough and noticeable change from the original state of the enemy
     // to the point where a player is more likely to determine when the seal will charge.
 
+
+    // Note: Main Menu Audio May not play because of Google
+
 'use strict'
 
 let tileSize = 32
